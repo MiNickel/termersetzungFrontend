@@ -1,0 +1,175 @@
+<div>
+  <ol>
+    <li>
+      <p>
+        <strong>Griechische Buschstaben:</strong><br>
+        <code>\Gamma \Delta \Omega ...</code>
+        <app-mathjax [content]="'$\\Gamma \\Delta \\Omega$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        <strong>Hochstellen und Tiefstellen:</strong><br>
+        <code>^</code><br>
+        und <br>
+        <code>_</code><br>
+        Beispiel: <br>
+        <code>x_i^2</code><br>
+        <app-mathjax [content]="'$x_i^2$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        <strong>Gruppen.</strong>
+        Hochstellen, Tiefstellen und andere Operationen werden nur auf das nächste Symbol angewendet. Wenn ihr mehrere
+        Zeichen hochstellen wollt, verwendet geschweifte Klammern, um eine Gruppe zu bilden: <br>
+        <code>&#123; ... &#125;</code>
+        Beispiel:
+        <code>10^10</code>
+        erzeugt
+        <app-mathjax [content]="'$10^10$'"></app-mathjax>
+        Hingegen bringt uns
+        <code>10^&#123;10&#125;</code>
+        was wir wollten.
+        <app-mathjax [content]="'$10^{10}$'"></app-mathjax>
+        <code>&#123;x^y&#125;^z | <span>x^&#123;y^z&#125; | </span><span>x^&#123;y^z&#125; | </span><span>x_i^2 | </span><span>x_&#123;i^2&#125;</span></code>
+        ergibt
+        <app-mathjax [content]="'${x^y}^z | x^{y^z} | x^{y^z} | x_i^2 | x_{i^2}$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        <strong>Klammersetzung.</strong>
+        Gewöhnliche Symbole:
+        <code>()[]</code>
+        führen zu Klammern
+        <app-mathjax [content]="'$(2+3)[4+4]$'"></app-mathjax>
+        . Um geschweifte Klammern zu erhalten, setzt einen Backslash davor:
+        <code>\&#123; a \&#125;</code>
+        erzeugt:
+        <app-mathjax [content]="'$\\{ a \\}$'"></app-mathjax>
+        Solche Klammern vergrößern sich nicht automatisch mit deren Inhalt. Bei
+        <code>(\frac&#123;\sqrt x&#125;&#123;y^3&#125;)</code>
+        werden die Klammern zu klein sein:
+        <app-mathjax [content]="'$(\\frac{\\sqrt x}{y^3})$'"></app-mathjax>
+        Verwendet hier besser:
+        <code>\left( … \right)</code>
+        dadurch passen sich die Klammern an die Formelgröße an. Beispiel:
+        <code>\left(\frac&#123;\sqrt x&#125;&#123;y^3&#125;\right)</code>
+        führt zu
+        <app-mathjax [content]="'$\\left(\\frac{\\sqrt x}{y^3}\\right)$'"></app-mathjax>
+        <code>\left \right</code>
+        lassen sich auf folgende Klammern anwenden:
+        <code>( ) [ ] &#123; &#125;</code>
+        Einfache <strong>Betragsstriche</strong> werden so gesetzt
+        <code>\vert</code>
+        <app-mathjax [content]="'$\\vert x \\vert$'"></app-mathjax>
+        Doppelte Betragsstriche:
+        <code>\Vert</code>
+        <app-mathjax [content]="'$\\Vert x \\Vert$'"></app-mathjax>
+        Eckige Klammern:
+        <code>\langle \rangle</code>
+        <app-mathjax [content]="'$\\langle x \\rangle$'"></app-mathjax>
+        <code>\lceil \rceil</code>
+        <app-mathjax [content]="'$\\lceil x \\rceil$'"></app-mathjax>
+        <code>\lfloor \rfloor</code>
+        <app-mathjax [content]="'$\\lfloor x \\lfloor$'"></app-mathjax>
+        Zusätzliche Trenner können so gesetzt werden:
+        <code>\middle</code>
+        Es gibt außerdem unsichtbare Klammern, notiert mit einem Punkt. Beispiel:
+        <code>\left.\frac12\right\rbrace</code>
+        rendert als
+        <app-mathjax [content]="'$\\left.\\frac12\\right\\rbrace$'"></app-mathjax>
+        Wenn man die Klammergröße manuell ändern muss, verwendet man:
+        <code>\Biggl(\biggl(\Bigl(\bigl((x)\bigr)\Bigr)\biggr)\Biggr)</code>
+        gerendert:
+        <app-mathjax [content]="'$\\Biggl(\\biggl(\\Bigl(\\bigl((x)\\bigr)\\Bigr)\\biggr)\\Biggr)$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        <strong>Summen und Integrale</strong>
+        <code>\sum \int</code>
+        Tiefstellen meint die Untergrenze und Hochstellen die Obergrenze:
+        <code>\sum_1^n</code>
+        <app-mathjax [content]="'$\\sum_1^n$'"></app-mathjax>
+        Ein Beispiel mit einer Gruppe:
+        <code>\sum_&#123;i=0&#125;^\infty i^2</code>
+        <app-mathjax [content]="'$\\sum_{i=0}^\\infty i^2$'"></app-mathjax>
+        Gleichermaßen:
+        <code>\prod \bigcup \bigcap \iint \iiint</code>
+        <app-mathjax [content]="'$\\prod \\bigcup \\bigcap \\iint \\iiint$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        <strong>Brüche.</strong>Es gibt zwei Arten, Brüche zu notieren:
+        <code>\frac ab</code>
+        nimmt a als Zähler und b als Nenner. Bei mehreren Zeichen sind Klammern &#123; &#125; zu setzen.
+        <code>\frac&#123;a+1&#125;&#123;b+1&#125;</code>
+        ergibt
+        <app-mathjax [content]="'$\\frac{a+1}{b+1}$'"></app-mathjax>
+        Falls Zähler und Nenner kompliziert sind, kann app-man
+        <code>\over</code>
+        verwenden, um die Gruppe zu trennen:
+        <code>&#123;a+1\over b+1&#125;</code>
+        ergibt
+        <app-mathjax [content]="'${a+1 \\over b+1}$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        <strong>Wurzelzeichen</strong>
+        <code>\sqrt – \sqrt&#123;x^3&#125; \sqrt[3]&#123;\frac xy&#125; \sqrt[3]&#123;\frac xy&#125;</code>
+        Führen zu
+        <app-mathjax [content]="'$\\sqrt – \\sqrt{x^3} \\sqrt[3]{\\frac xy} \\sqrt[3]{\\frac xy}$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        Einige <strong>spezielle Funktionen</strong> wie lim, sin, max, ln etc. werden kursiv gesetzt. Nutzt hier:
+        <code>\lim x; \sin x</code>
+        um sie korrekt darzustellen:
+        <app-mathjax [content]="'$\\lim x; \\sin x$'"></app-mathjax>
+      </p>
+    </li>
+    <li>
+      <p>
+        Es gibt eine Vielzahl an <strong>Sonderzeichen und Notationen</strong>. Die wichtigsten sind:
+        <code>\lt \gt \le \ge \neq</code>
+        <app-mathjax [content]="'$\\lt \\gt \\le \\ge \\neq$'"></app-mathjax>
+        Um einen Strich durch Formeln zu ziehen, verwende:
+        <code>\not</code>
+        <app-mathjax [content]="'$\\not$'"></app-mathjax>
+        <code>\times \div \pm \mp</code>
+        <app-mathjax [content]="'$\\times \\div \\pm \\mp$'"></app-mathjax>
+        <code>\cdot</code>
+        ergibt einen zentrierten Malpunkt
+        <app-mathjax [content]="'$x \\cdot y$'"></app-mathjax>
+        <code>\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing</code>
+        Gerendert:
+        <app-mathjax
+          [content]="'$\\cup \\cap \\setminus \\subset \\subseteq \\subsetneq \\supset \\in \\notin \\emptyset \\varnothing$'">
+        </app-mathjax>
+        <code>&#123;n+1 \choose 2k&#125;
+          \binom&#123;n+1&#125;&#123;2k&#125;</code>
+        <app-mathjax [content]="'${n+1 \\choose 2k}$'"></app-mathjax>
+        oder
+        <app-mathjax [content]="'$\\binom{n+1}{2k}$'"></app-mathjax>
+        <code>\to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto</code>
+        <app-mathjax [content]="'$\\to \\rightarrow \\leftarrow \\Rightarrow \\Leftarrow \\mapsto$'"></app-mathjax>
+        <code>\land \lor \lnot \forall \exists \top \bot \vdash \vDash</code>
+        <app-mathjax [content]="'$\\land \\lor \\lnot \\forall \\exists \\top \\bot \\vdash \\vDash$'"></app-mathjax>
+        <code>\star \ast \oplus \circ \bullet</code>
+        <app-mathjax [content]="'$\\star \\ast \\oplus \\circ \\bullet$'"></app-mathjax>
+        <code>\approx \sim \simeq \cong \equiv \prec \lhd</code>
+        <app-mathjax [content]="'$\\approx \\sim \\simeq \\cong \\equiv \\prec \\lhd$'"></app-mathjax>
+        <code>\infty \aleph_0</code>
+        <app-mathjax [content]="'$\\infty \\aleph_0$'"></app-mathjax>
+        Für modulare Äquivalenz benutzt:
+        <code>a\equiv b\pmod n</code>
+        <app-mathjax [content]="'$a\\equiv b\\pmod n$'"></app-mathjax>
+      </p>
+    </li>
+  </ol>
+</div>

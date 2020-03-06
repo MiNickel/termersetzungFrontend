@@ -1,0 +1,111 @@
+<form [formGroup]="taskForm">
+
+  <div class="form-group">
+    <label>Name</label>
+    <input type="text" class="form-control" formControlName="name">
+    <small id="nameHelp" class="form-text text-muted">Name der Aufgabe</small>
+  </div>
+
+  <div class="form-group">
+    <label>Punkte</label>
+    <input type="number" class="form-control" formControlName="score">
+    <small id="scoreHelp" class="form-text text-muted">Anzahl der Punkte für diese Aufgabe</small>
+  </div>
+
+  <div class="form-group">
+    <label>Beschreibung</label>
+    <textarea class="form-control" rows="4" formControlName="description"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>Startterm</label>
+    <input (focus)="onFocus($event)" class="form-control" formControlName="startTerm" type="text">
+    <app-mathjax *ngIf="checkValue(taskForm.controls.startTerm.value)"
+      [content]="'$' + taskForm.controls.startTerm.value + '$'"></app-mathjax>
+  </div>
+
+  <div class="form-group">
+    <label>Zwischenschritte</label>
+    <div>
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#stepsModal">Zwischenschritte
+        hinzufügen</button>
+    </div>
+    <div formArrayName="steps" class="modal fade" id="stepsModal" tabindex="-1" role="dialog"
+      aria-labelledby="stepsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="stepsModalLabel">Zwischenschritte</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" *ngFor="let step of steps.controls; let i=index">
+            <input (focus)="onFocus($event)" class="form-control" [formControlName]="i" type="text">
+            <app-mathjax *ngIf="checkValue(step.value)" [content]="'$' + step.value + '$'"></app-mathjax>
+            <button *ngIf="steps.length > 1" type="button" class="btn btn-secondary btn-sm"
+              (click)="removeStep(i)">Schritt löschen</button>
+          </div>
+          <button style="margin-bottom: 1rem;" type="button" class="btn btn-secondary" (click)="addStep()">Schritt hinzufügen</button>
+          <div class="btn-group" role="group">
+            <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">$$\div$$</button>
+            <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">$$\cdot$$</button>
+            <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary">$$( )$$</button>
+            <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">$$x^n$$</button>
+            <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">$$\sqrt x$$</button>
+            <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">$$\sin(x)$$</button>
+            <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">$$\cos(x)$$</button>
+            <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">$$ \vert \vert $$</button>
+            <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">$$!$$</button>
+            <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">$$ \int$$</button>
+            <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">$$\sum$$</button>
+            <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">$$\coprod$$</button>
+            <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">$$\cup$$</button>
+            <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">$$\cap$$</button>
+            <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">$$F^\prime$$</button>
+            <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
+              class="btn btn-secondary">$$(f^\prime)^\prime$$</button>
+            <button (click)="setSymbol('det')" type="button" class="btn btn-secondary">$$det$$</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Endterm</label>
+    <input (focus)="onFocus($event)" class="form-control" formControlName="endTerm" type="text">
+    <app-mathjax *ngIf="checkValue(taskForm.controls.endTerm.value)"
+      [content]="'$' + taskForm.controls.endTerm.value + '$'"></app-mathjax>
+  </div>
+
+  <div style="margin-bottom: 1rem;" class="btn-group" role="group">
+    <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">$$\div$$</button>
+    <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">$$\cdot$$</button>
+    <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary">$$( )$$</button>
+    <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">$$x^n$$</button>
+    <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">$$\sqrt x$$</button>
+    <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">$$\sin(x)$$</button>
+    <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">$$\cos(x)$$</button>
+    <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">$$ \vert \vert $$</button>
+    <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">$$!$$</button>
+    <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">$$ \int$$</button>
+    <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">$$\sum$$</button>
+    <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">$$\coprod$$</button>
+    <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">$$\cup$$</button>
+    <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">$$\cap$$</button>
+    <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">$$F^\prime$$</button>
+    <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
+      class="btn btn-secondary">$$(f^\prime)^\prime$$</button>
+    <button (click)="setSymbol('det')" type="button" class="btn btn-secondary">$$det$$</button>
+  </div>
+  <div>
+    <button style="margin-right: 1rem;" (click)="saveTask()" type="button" class="btn btn-secondary">Aufgabe
+      speichern</button>
+    <button (click)="submit()" type="button" class="btn btn-secondary">Klausur/Übung hochladen</button>
+  </div>
+  
+</form>

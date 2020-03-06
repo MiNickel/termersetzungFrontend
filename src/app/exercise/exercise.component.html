@@ -1,0 +1,26 @@
+<div *ngIf="exercises" class="container">
+  <div *ngFor="let row of array(numberOfRows); let i=index" class="row">
+    <div class="col-sm">
+      <div *ngIf="exercises[3*i+0] !== undefined" class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{exercises[3*i+0].name}}</h5>
+          <p class="card-text">{{exercises[3*i+0].category}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div *ngIf="exercises[3*i+1] !== undefined" class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{exercises[3*i+1].name}}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div *ngIf="exercises[3*i+2] !== undefined" class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{exercises[3*i+2].name}}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-md-3">
+    <app-upload-list></app-upload-list>
+  </div>
+  <div class="col-md-9">
+    <form [formGroup]="form">
+      <div class="form-row">
+        <div class="col form-group">
+          <label>Übung oder Klausur</label>
+          <select class="custom-select mr-sm-2" formControlName="isExam">
+            <option value="false">Übung</option>
+            <option value="true">Klausur</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <label>Name</label>
+          <input type="text" class="form-control" formControlName="name">
+          <small class="form-text text-muted">Geben Sie hier den Namen der Klausur/Übung ein.</small>
+        </div>
+        <div class="col form-group">
+          <label>Professor</label>
+          <input type="text" class="form-control" formControlName="professor">
+          <small class="form-text text-muted">Vor- und Nachname</small>
+        </div>
+      </div>
+      <div *ngIf="form.controls.isExam.value === 'false'" class="form-row">
+        <div class="col form-group">
+          <label>Kategorie</label>
+          <input type="text" class="form-control" formControlName="category">
+          <small class="form-text text-muted">Kategorie der Übung</small>
+        </div>
+      </div>
+      <div>
+        <app-error [error]="errorMessage"></app-error>
+      </div>
+    </form>
+    <hr>
+    <div>
+      <app-create-tasks [task]="task" (emitTask)="saveTask($event)" (uploadTest)="upload($event)"></app-create-tasks>
+    </div>
+  </div>
+</div>

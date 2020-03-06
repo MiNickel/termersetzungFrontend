@@ -1,0 +1,11 @@
+<li class="list-group-item">
+  <b>{{exam.name}}</b>
+  <hr>
+  <ol>
+    <li *ngFor="let task of exam.tasks">
+      <a (click)="selectTask(task)">{{task.name}}</a>
+        <span>{{' - ' + task.score + ' Punkte'}}</span>
+        <span *ngIf="taskStateMap.get(task.name) !== undefined">{{', ' + taskStateMap.get(task.name)}}</span>
+    </li>
+  </ol>
+</li>

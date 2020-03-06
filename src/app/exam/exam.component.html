@@ -1,0 +1,23 @@
+<div *ngIf="exam === undefined" class="d-flex justify-content-center">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Klausurencode</h5>
+      <p>Geben Sie hier den Code für die Klausur ein</p>
+      <input [(ngModel)]="code" type="text" class="form-control" placeholder="Code" aria-label="Code">
+      <br>
+      <button (click)="submit()" type="button" class="btn btn-light">Enter</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="exam !== undefined" class="row">
+  <div class="col-md-3">
+    <app-exam-list [exam]="exam">
+
+    </app-exam-list>
+  </div>
+  <div class="col-md-9">
+    <app-main-task>
+
+    </app-main-task>
+  </div>
+</div>

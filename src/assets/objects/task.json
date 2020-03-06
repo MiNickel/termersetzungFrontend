@@ -1,0 +1,20 @@
+[
+  {
+    "tasks": [
+      { "subtask": "AufgabenText", "solution": "Lösung 1", "name": "Aufgabe 1" },
+      { "subtask": "A2", "solution": "S2", "name": "an2" },
+      { "subtask": "A3", "solution": "S3", "name": "an3" },
+      { "subtask": "A4", "solution": "S4", "name": "an4" }
+    ],
+    "name": "Themenbereich 1"
+  },
+  {
+    "tasks": [
+      { "subtask": "AA1", "solution": "S1", "name": "an1"  },
+      { "subtask": "AA2", "solution": "S2", "name": "an2"  },
+      { "subtask": "AA3", "solution": "S3", "name": "an3"  },
+      { "subtask": "AA4", "solution": "S4", "name": "an4" }
+    ],
+    "name": "Integral"
+  }
+]

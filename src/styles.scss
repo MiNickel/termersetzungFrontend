@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    color: #666;
+    /*background-color: #fff;*/
+    background-color: white;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.7em;
+    height: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+html {
+    background-color: white;
+    height: 100%;
+    min-height: 100%;
+}
+
+a:hover {
+    cursor: pointer;
+}
