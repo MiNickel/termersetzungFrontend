@@ -5,12 +5,21 @@
     </app-exercise-list>
   </div>
   <div class="col-md-9">
-    <div *ngFor="let step of steps; let i = index;" class="row">
-      <app-mathjax *ngIf="taskObject.startTerm != undefined" class="col-2" [content]="step"></app-mathjax>
-      <input (focus)="onFocus($event)" *ngIf="taskObject.startTerm != undefined" type="text" class="form-control"
-        [(ngModel)]="operations[i]" class="col-1" />
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label" *ngIf="taskObject.description !== undefined">{{taskObject.description}}</label>
     </div>
-    <input (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text">
+    <hr *ngIf="taskObject.description !== undefined">
+    <div *ngFor="let step of steps; let i = index;" class="form-group row" style="margin-bottom: 0;">
+      <app-mathjax *ngIf="taskObject.startTerm !== undefined" class="col-sm-2 col-form-label" [content]="step">
+      </app-mathjax>
+      <div class="col-sm-2">
+        <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.startTerm !== undefined" type="text" class="form-control"
+          [(ngModel)]="operations[i]" />
+      </div>
+    </div>
+    <div class="form-group row" style="margin-bottom: 0;">
+      <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text" class="form-control col-sm-2">
+    </div>
     <app-mathjax *ngIf="newTerm !==''" class="col-2" [content]="'$' + newTerm + '$'"></app-mathjax>
     <br>
     <br>
@@ -44,8 +53,8 @@
       <form [formGroup]="form">
         <div class="form-check-inline">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" checked formControlName="taskState"
-              value="nicht gelesen">noch nicht gelesen
+            <input type="radio" class="form-check-input" checked formControlName="taskState" value="nicht gelesen">noch
+            nicht gelesen
           </label>
         </div>
         <div class="form-check-inline">
