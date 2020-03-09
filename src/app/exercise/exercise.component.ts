@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ExerciseService } from '../services/exercise.service';
 import { Exercise } from '../app.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-exercise',
@@ -12,7 +13,7 @@ export class ExerciseComponent implements OnInit {
   public exercises: Exercise[];
   public numberOfRows: number;
 
-  constructor(private exerciseService: ExerciseService) { }
+  constructor(private exerciseService: ExerciseService, private router: Router) { }
 
   ngOnInit() {
     this.exerciseService.getAllExercises().subscribe((exercises: Exercise[]) => {
@@ -21,8 +22,12 @@ export class ExerciseComponent implements OnInit {
     });
   }
 
-  array(n: number): any[] {
+  public array(n: number): any[] {
     return Array(n);
+  }
+
+  public openExercise(index: number) {
+    this.router.navigate(['/exercise', this.exercises[index].id]);
   }
 
 }

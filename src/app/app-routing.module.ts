@@ -6,6 +6,7 @@ import { ExamComponent } from './exam/exam.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { UploadComponent } from './upload/upload.component';
 import { GeneratePdfComponent } from './generate-pdf/generate-pdf.component';
+import { ExerciseDetailsComponent } from './exercise/exercise-details/exercise-details.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'help', component: HelpComponent },
   { path: 'exam', component: ExamComponent },
   { path: 'exercise', component: ExerciseComponent },
+  { path: 'exercise/:id', component: ExerciseDetailsComponent },
   { path: 'upload', component: UploadComponent },
   { path: 'pdf', component: GeneratePdfComponent }
 ];

@@ -15,7 +15,6 @@ import { HeaderComponent } from './header/header.component';
 import { HelpComponent } from './help/help.component';
 import { ExamComponent } from './exam/exam.component';
 import { ExamService } from './services/exam.service';
-import { ExerciseListComponent } from './list/exercise-list/exercise-list.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ExamListComponent } from './exam/exam-list/exam-list.component';
 import { UploadComponent } from './upload/upload.component';
@@ -25,6 +24,8 @@ import { UploadListComponent } from './upload/upload-list/upload-list.component'
 import { GeneratePdfComponent } from './generate-pdf/generate-pdf.component';
 import { ExerciseService } from './services/exercise.service';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ExerciseDetailsComponent } from './exercise/exercise-details/exercise-details.component';
+import { ExerciseListComponent } from './exercise/exercise-list/exercise-list.component';
 
 @NgModule({
    declarations: [
@@ -43,7 +44,8 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
       ErrorComponent,
       CreateTasksComponent,
       UploadListComponent,
-      GeneratePdfComponent
+      GeneratePdfComponent,
+      ExerciseDetailsComponent
    ],
    imports: [
       BrowserModule,
