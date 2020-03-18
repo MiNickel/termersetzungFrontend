@@ -18,21 +18,14 @@
   </div>
 
   <div class="form-group">
-    <label>Startterm</label>
-    <input (focus)="onFocus($event)" class="form-control" formControlName="startTerm" type="text">
-    <app-mathjax *ngIf="checkValue(taskForm.controls.startTerm.value)"
-      [content]="'$' + taskForm.controls.startTerm.value + '$'"></app-mathjax>
-  </div>
-
-  <div class="form-group">
-    <label>Zwischenschritte</label>
+    <label>Schritte</label>
     <div>
-      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#stepsModal">Zwischenschritte
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#stepsModal">Schritte
         hinzufügen</button>
     </div>
     <div formArrayName="steps" class="modal fade" id="stepsModal" tabindex="-1" role="dialog"
       aria-labelledby="stepsModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="stepsModalLabel">Zwischenschritte</h5>
@@ -41,12 +34,28 @@
             </button>
           </div>
           <div class="modal-body" *ngFor="let step of steps.controls; let i=index">
-            <input (focus)="onFocus($event)" class="form-control" [formControlName]="i" type="text">
-            <app-mathjax *ngIf="checkValue(step.value)" [content]="'$' + step.value + '$'"></app-mathjax>
-            <button *ngIf="steps.length > 1" type="button" class="btn btn-secondary btn-sm"
-              (click)="removeStep(i)">Schritt löschen</button>
+            <ng-container [formGroupName]="i">
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label>Term</label>
+                  <input (focus)="onFocus($event)" class="form-control" formControlName="step" type="text">
+                  <app-mathjax *ngIf="checkValue(step.get('step').value)" [content]="'$' + step.get('step').value + '$'"></app-mathjax>
+                </div>
+                <div class="form-group col-md-3">
+                  <label>Umformung</label>
+                  <input (focus)="onFocus($event)" class="form-control" formControlName="conversion" type="text">
+                </div>
+                <div class="form-group col-md-1">
+                  <label>Punkte</label>
+                  <input class="form-control" formControlName="score" type="text">
+                </div>
+              </div>
+              <button *ngIf="steps.length > 1" type="button" class="btn btn-secondary btn-sm"
+                (click)="removeStep(i)">Schritt löschen</button>
+            </ng-container>
           </div>
-          <button style="margin-bottom: 1rem;" type="button" class="btn btn-secondary" (click)="addStep()">Schritt hinzufügen</button>
+          <button style="margin-bottom: 1rem;" type="button" class="btn btn-secondary" (click)="addStep()">Schritt
+            hinzufügen</button>
           <div class="btn-group" role="group">
             <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">$$\div$$</button>
             <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">$$\cdot$$</button>
@@ -55,7 +64,8 @@
             <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">$$\sqrt x$$</button>
             <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">$$\sin(x)$$</button>
             <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">$$\cos(x)$$</button>
-            <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">$$ \vert \vert $$</button>
+            <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">$$ \vert \vert
+              $$</button>
             <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">$$!$$</button>
             <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">$$ \int$$</button>
             <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">$$\sum$$</button>
@@ -73,13 +83,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="form-group">
-    <label>Endterm</label>
-    <input (focus)="onFocus($event)" class="form-control" formControlName="endTerm" type="text">
-    <app-mathjax *ngIf="checkValue(taskForm.controls.endTerm.value)"
-      [content]="'$' + taskForm.controls.endTerm.value + '$'"></app-mathjax>
   </div>
 
   <div style="margin-bottom: 1rem;" class="btn-group" role="group">
@@ -107,5 +110,4 @@
       speichern</button>
     <button (click)="submit()" type="button" class="btn btn-secondary">Klausur/Übung hochladen</button>
   </div>
-  
 </form>

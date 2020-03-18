@@ -53,7 +53,12 @@ import { ExerciseListComponent } from './exercise/exercise-list/exercise-list.co
       FormsModule,
       HttpClientModule,
       ReactiveFormsModule,
-      NgbModalModule
+      NgbModalModule,
+      /* MathJaxModule.forRoot({
+         version: '2.7.5',
+         config: 'TeX-AMS_HTML',
+         hostname: 'cdnjs.cloudflare.com'
+      }) */
    ],
    providers: [
       MainService,

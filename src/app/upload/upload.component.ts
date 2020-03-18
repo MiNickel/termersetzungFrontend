@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Task, Exam, Exercise } from '../app.model';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Task, Exam, Exercise, Examiner } from '../app.model';
 import { UploadListComponent } from './upload-list/upload-list.component';
 import { ExamService } from '../services/exam.service';
 import { ExerciseService } from '../services/exercise.service';
@@ -38,7 +38,10 @@ export class UploadComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', Validators.required],
       isExam: [null, Validators.required],
-      professor: ['', Validators.required],
+      examiner: new FormGroup({
+        firstname: new FormControl(''),
+        lastname: new FormControl('')
+      }),
       category: ['', Validators.required]
     });
   }
@@ -50,15 +53,17 @@ export class UploadComponent implements OnInit {
       return new Exam(
         -1,
         formValues.name.value,
-        formValues.professor.value,
+        new Examiner(-1, formValues.examiner.get('firstname').value, formValues.examiner.get('lastname').value),
         this.tasks,
-        ''
+        '',
+        null,
+        null
       );
     } else {
       return new Exercise(
         -1,
         formValues.name.value,
-        formValues.professor.value,
+        new Examiner(-1, formValues.examiner.get('firstname').value, formValues.examiner.get('lastname').value),
         formValues.category.value,
         this.tasks
       );

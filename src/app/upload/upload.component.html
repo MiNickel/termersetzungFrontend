@@ -15,13 +15,21 @@
         <div class="col form-group">
           <label>Name</label>
           <input type="text" class="form-control" formControlName="name">
-          <small class="form-text text-muted">Geben Sie hier den Namen der Klausur/Übung ein.</small>
+          <small class="form-text text-muted">Name der Klausur/Übung</small>
         </div>
-        <div class="col form-group">
-          <label>Professor</label>
-          <input type="text" class="form-control" formControlName="professor">
-          <small class="form-text text-muted">Vor- und Nachname</small>
-        </div>
+        <ng-container formGroupName="examiner">
+          <div class="col form-group">
+            <label>Prüfer/Prüferin</label>
+            <input type="text" class="form-control" formControlName="firstname">
+            <small class="form-text text-muted">Vorname</small>
+          </div>
+          <div class="col form-group">
+            <label>Prüfer/Prüferin</label>
+            <input type="text" class="form-control" formControlName="lastname">
+            <small class="form-text text-muted">Nachname</small>
+          </div>
+        </ng-container>
+        
       </div>
       <div *ngIf="form.controls.isExam.value === 'false'" class="form-row">
         <div class="col form-group">

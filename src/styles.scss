@@ -23,3 +23,26 @@ html {
 a:hover {
     cursor: pointer;
 }
+
+.mje-input {
+    border: none;
+    height: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    width: 0;
+}
+
+.mje-container {
+    cursor: text;
+}
+
+.mje-cursor.hidden {
+    display: none;
+}
+
+.mje-cursor {
+    background-color: #000;
+    position: absolute;
+    width: 1px;
+}

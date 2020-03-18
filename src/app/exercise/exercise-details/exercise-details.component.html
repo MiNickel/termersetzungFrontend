@@ -4,52 +4,62 @@
 
     </app-exercise-list>
   </div>
-  <div class="col-md-9">
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label" *ngIf="taskObject.description !== undefined">{{taskObject.description}}</label>
-    </div>
-    <hr *ngIf="taskObject.description !== undefined">
-    <div *ngFor="let step of steps; let i = index;" class="form-group row" style="margin-bottom: 0;">
-      <app-mathjax *ngIf="taskObject.startTerm !== undefined" class="col-sm-2 col-form-label" [content]="step">
-      </app-mathjax>
-      <div class="col-sm-2">
-        <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.startTerm !== undefined" type="text" class="form-control"
-          [(ngModel)]="operations[i]" />
+  <div *ngIf="taskObject !== undefined" class="col-md-9">
+    <div class="row">
+      <div class="col-sm">
+        <p *ngIf="taskObject.description !== undefined">{{taskObject.description}}</p>
+      </div>
+      <div *ngIf="taskObject.steps[0].step !== ''" class="col-sm btn-group" role="group">
+        <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">$$\div$$</button>
+        <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">$$\cdot$$</button>
+        <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary">$$( )$$</button>
+        <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">$$x^n$$</button>
+        <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">$$\sqrt x$$</button>
+        <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">$$\sin(x)$$</button>
+        <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">$$\cos(x)$$</button>
+        <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">$$ \vert \vert $$</button>
+        <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">$$!$$</button>
+        <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">$$ \int$$</button>
+        <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">$$\sum$$</button>
+        <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">$$\coprod$$</button>
+        <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">$$\cup$$</button>
+        <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">$$\cap$$</button>
+        <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">$$F^\prime$$</button>
+        <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
+          class="btn btn-secondary">$$(f^\prime)^\prime$$</button>
+        <button (click)="setSymbol('det')" type="button" class="btn btn-secondary">$$det$$</button>
       </div>
     </div>
-    <div class="form-group row" style="margin-bottom: 0;">
-      <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text" class="form-control col-sm-2">
+    <hr *ngIf="taskObject.description !== undefined">
+
+    <ng-container *ngFor="let step of steps; let i = index;">
+      <div class="form-group row" style="margin-bottom: 0;">
+        <app-mathjax *ngIf="taskObject.steps[0].step !== undefined" class="col-sm-2 col-form-label" [content]="step">
+        </app-mathjax>
+        <div class="col-sm-2">
+          <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.steps[0].step !== undefined"
+            type="text" class="form-control" [(ngModel)]="operations[i]" />
+        </div>
+        <button (click)="editStep(i)" *ngIf="i !== 0" type="button" class="btn btn-light">Edit</button>
+      </div>
+      <div *ngIf="editStepBool[i]" class="form-group row">
+        <input placeholder="Term bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step" type="text"
+        class="form-control col-sm-2">
+      </div>
+    </ng-container>
+    <div class="form-group row">
+      <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text"
+        class="form-control col-sm-2">
     </div>
-    <app-mathjax *ngIf="newTerm !==''" class="col-2" [content]="'$' + newTerm + '$'"></app-mathjax>
-    <br>
-    <br>
-    <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="check()">Umformung prüfen</button>
-    <button type="button" class="btn btn-light" (click)="finished()">Fertig</button>
-    <br>
-    <br>
-    <div *ngIf="taskObject.startTerm !== ''" class="btn-group" role="group">
-      <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">$$\div$$</button>
-      <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">$$\cdot$$</button>
-      <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary">$$( )$$</button>
-      <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">$$x^n$$</button>
-      <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">$$\sqrt x$$</button>
-      <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">$$\sin(x)$$</button>
-      <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">$$\cos(x)$$</button>
-      <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">$$ \vert \vert $$</button>
-      <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">$$!$$</button>
-      <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">$$ \int$$</button>
-      <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">$$\sum$$</button>
-      <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">$$\coprod$$</button>
-      <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">$$\cup$$</button>
-      <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">$$\cap$$</button>
-      <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">$$F^\prime$$</button>
-      <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
-        class="btn btn-secondary">$$(f^\prime)^\prime$$</button>
-      <button (click)="setSymbol('det')" type="button" class="btn btn-secondary">$$det$$</button>
+    <div class="form-group row">
+      <app-mathjax *ngIf="newTerm !==''" class="col-2" [content]="'$' + newTerm + '$'"></app-mathjax>
     </div>
-    <br>
-    <br>
-    <div>
+    <div class="form-group row">
+      <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="check()">Umformungen prüfen</button>
+      <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt</button>
+      <button type="button" class="btn btn-light" (click)="finished()">Fertig</button>
+    </div>
+    <div class="form-group row">
       <form [formGroup]="form">
         <div class="form-check-inline">
           <label class="form-check-label">
@@ -64,8 +74,8 @@
         </div>
         <div class="form-check-inline">
           <label class="form-check-label">
-            <input type="radio" class="form-check-input" formControlName="taskState" value="kann ich nicht">das
-            kann ich nicht
+            <input type="radio" class="form-check-input" formControlName="taskState"
+              value="zurückgestellt">zurückgestellt
           </label>
         </div>
         <div class="form-check-inline">

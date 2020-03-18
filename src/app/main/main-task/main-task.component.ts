@@ -37,9 +37,9 @@ export class MainTaskComponent implements OnInit {
       this.taskObject = task;
       console.log(task);
       let taskFromLocalStorage: any = localStorage.getItem(task.name);
-      this.solution = task.endTerm;
+      // this.solution = task.endTerm;
       if (taskFromLocalStorage === null) {
-        this.task = task.startTerm;
+        // this.task = task.startTerm;
         this.steps = [];
         this.operations = [];
         this.steps[0] = '$' + this.task + '$';

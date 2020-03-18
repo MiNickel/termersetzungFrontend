@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Task } from 'src/app/app.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -41,11 +41,13 @@ export class CreateTasksComponent implements OnInit {
       id: [-1, Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
-      startTerm: ['', Validators.required],
       steps: this.fb.array([
-        this.fb.control('')
+        new FormGroup({
+          step: new FormControl(),
+          score: new FormControl(),
+          conversion: new FormControl()
+        })
       ]),
-      endTerm: ['', Validators.required],
       score: [null, Validators.required],
     });
   }
@@ -55,7 +57,12 @@ export class CreateTasksComponent implements OnInit {
   }
 
   addStep() {
-    this.steps.push(this.fb.control(''));
+    const step = new FormGroup({
+      step: new FormControl(),
+      score: new FormControl(),
+      conversion: new FormControl()
+    });
+    this.steps.push(step);
   }
 
   removeStep(i: number) {
@@ -79,7 +86,7 @@ export class CreateTasksComponent implements OnInit {
   }
 
   public setSymbol(symbol: string) {
-    this.activeInputElement.value = symbol;
+    this.activeInputElement.value += symbol;
   }
 
   private formToModel() {
@@ -88,9 +95,7 @@ export class CreateTasksComponent implements OnInit {
       -1,
       formValues.name.value,
       formValues.description.value,
-      formValues.startTerm.value,
       formValues.steps.value,
-      formValues.endTerm.value,
       formValues.score.value
     );
   }
@@ -100,9 +105,7 @@ export class CreateTasksComponent implements OnInit {
       id: task.id,
       name: task.name,
       description: task.description,
-      startTerm: task.startTerm,
       steps: task.steps,
-      endTerm: task.endTerm,
       score: task.score
     };
   }

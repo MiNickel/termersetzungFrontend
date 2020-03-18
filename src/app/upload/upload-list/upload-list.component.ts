@@ -21,7 +21,7 @@ export class UploadListComponent implements OnInit {
   }
 
   public createNewTask() {
-    this.taskService.changeTask(new Task(-1, '', '', '', [], '', null));
+    this.taskService.changeTask(new Task(-1, '', '', [], null));
    }
 
 }

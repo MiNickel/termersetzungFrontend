@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Exercise, Task } from '../app.model';
+import { Exercise, Task, CheckStep } from '../app.model';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -37,6 +37,12 @@ export class ExerciseService {
     uploadExercise(exercise: Exercise) {
         return this.http.post<Exercise>(this.url,
             exercise
+        );
+    }
+
+    checkTask(checkStepList: CheckStep[]) {
+        return this.http.post<CheckStep[]>(this.url + '/check',
+        checkStepList
         );
     }
 }
