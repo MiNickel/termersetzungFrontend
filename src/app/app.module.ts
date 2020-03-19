@@ -26,6 +26,7 @@ import { ExerciseService } from './services/exercise.service';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ExerciseDetailsComponent } from './exercise/exercise-details/exercise-details.component';
 import { ExerciseListComponent } from './exercise/exercise-list/exercise-list.component';
+import { ExaminerComponent } from './examiner/examiner.component';
 
 @NgModule({
    declarations: [
@@ -45,7 +46,8 @@ import { ExerciseListComponent } from './exercise/exercise-list/exercise-list.co
       CreateTasksComponent,
       UploadListComponent,
       GeneratePdfComponent,
-      ExerciseDetailsComponent
+      ExerciseDetailsComponent,
+      ExaminerComponent
    ],
    imports: [
       BrowserModule,

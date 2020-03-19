@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ExerciseService } from 'src/app/services/exercise.service';
-import { Exercise, Task, CheckStep } from 'src/app/app.model';
-import { MainService } from 'src/app/main/main.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ExerciseService} from 'src/app/services/exercise.service';
+import {Exercise, Task, CheckStep} from 'src/app/app.model';
+import {MainService} from 'src/app/main/main.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-exercise-details',
@@ -24,7 +24,8 @@ export class ExerciseDetailsComponent implements OnInit {
   public form: FormGroup;
 
   constructor(private route: ActivatedRoute, private exerciseService: ExerciseService, private mainService: MainService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder) {
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -76,7 +77,9 @@ export class ExerciseDetailsComponent implements OnInit {
   check() {
     const checkStepList: CheckStep[] = [];
     for (let i = 0; i < this.steps.length - 1; i++) {
-      checkStepList.push(new CheckStep(this.steps[i], this.operations[i], null));
+      const startEquation: string = this.steps[i].replace(/\$/g, '');
+      const targetEquation: string = this.steps[i + 1].replace(/\$/g, '');
+      checkStepList.push(new CheckStep(startEquation, this.operations[i], targetEquation, null));
     }
     this.exerciseService.checkTask(checkStepList).subscribe(result => {
       console.log(result);
@@ -111,6 +114,8 @@ export class ExerciseDetailsComponent implements OnInit {
     this.steps.push('$' + this.newTerm + '$');
     this.newTerm = '';
     this.editStepBool.push(false);
+    console.log(this.steps.length);
+    console.log(this.operations.length);
   }
 
   finished() {

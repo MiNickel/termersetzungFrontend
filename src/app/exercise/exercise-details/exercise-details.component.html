@@ -33,7 +33,7 @@
     <hr *ngIf="taskObject.description !== undefined">
 
     <ng-container *ngFor="let step of steps; let i = index;">
-      <div class="form-group row" style="margin-bottom: 0;">
+      <div class="form-group row" style="margin-bottom: 5px;">
         <app-mathjax *ngIf="taskObject.steps[0].step !== undefined" class="col-sm-2 col-form-label" [content]="step">
         </app-mathjax>
         <div class="col-sm-2">

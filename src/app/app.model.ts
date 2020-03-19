@@ -48,8 +48,9 @@ export class Step {
 
 export class CheckStep {
     constructor(
-        public step: string,
-        public conversion: string,
+        public startEquation: string,
+        public rule: string,
+        public targetEquation: string,
         public isCorrect: boolean,
     ) {
     }
