@@ -1,7 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
-import { Task } from 'src/app/app.model';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Task} from 'src/app/app.model';
 
 @Component({
   selector: 'app-create-tasks',
@@ -18,20 +17,22 @@ export class CreateTasksComponent implements OnInit {
 
   @Input()
   public set task(task: Task) {
+    this.createForm();
     this.onTask(task);
   }
 
   public taskForm: FormGroup;
   public activeInputElement: any;
 
-  constructor(private fb: FormBuilder, private modalService: NgbModal) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit() {
     this.createForm();
   }
 
   private onTask(task: Task) {
-    if (task !== undefined) {
+    if (task instanceof Object) {
       this.taskForm.reset(this.modelToForm(task));
       this.steps.clear();
       for (const step of task.steps) {
@@ -79,11 +80,7 @@ export class CreateTasksComponent implements OnInit {
   }
 
   public checkValue(value: string) {
-    if (value !== '' && value !== null && value !== undefined) {
-      return true;
-    } else {
-      return false;
-    }
+    return value !== '' && value !== null && value !== undefined;
   }
 
   public check() {
@@ -122,12 +119,9 @@ export class CreateTasksComponent implements OnInit {
   public saveTask() {
     if (this.taskForm.valid) {
       const task: Task = this.formToModel();
-      const steps = task.steps.filter(step => step.step != null);
-      task.steps = steps;
+      task.steps = task.steps.filter(step => step.step != null);
       this.emitTask.emit(task);
       this.createForm();
-    } else {
-
     }
   }
 

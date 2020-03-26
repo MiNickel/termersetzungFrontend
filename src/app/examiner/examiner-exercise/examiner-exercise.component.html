@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-2">
+    <app-examiner-tasklist></app-examiner-tasklist>
+  </div>
+  <div style="margin-right: 100px" class="col-md">
+    <form *ngIf="created" [formGroup]="form">
+      <div class="form-row">
+        <div class="col form-group">
+          <label>Name</label>
+          <input type="text" class="form-control" formControlName="name">
+        </div>
+        <ng-container formGroupName="examiner">
+          <div class="col form-group">
+            <label>Vorname des Prüfers/der Prüferin</label>
+            <input type="text" class="form-control" formControlName="firstname">
+          </div>
+          <div class="col form-group">
+            <label>Nachname des Prüfers/der Prüferin</label>
+            <input type="text" class="form-control" formControlName="lastname">
+          </div>
+        </ng-container>
+      </div>
+      <div class="form-row">
+        <div class="col form-group">
+          <label>Kategorie</label>
+          <input type="text" class="form-control" formControlName="category">
+        </div>
+      </div>
+    </form>
+    <hr>
+    <div>
+      <app-create-tasks [task]="task" (emitTask)="saveTask($event)" (uploadTest)="upload($event)"></app-create-tasks>
+    </div>
+  </div>
+</div>
+
+
+

@@ -11,13 +11,13 @@
     <div class="col-sm">
       <ul class="list-group">
         <li (click)="goToExam(exam.id)" *ngFor="let exam of exams" class="list-group-item">
-          {{exam.name + ', ' + exam.examiner.firstname + ' ' + exam.examiner.lastname}}</li>
+          {{'Name: ' + exam.name + ', Prüfer/Prüferin: ' + exam.examiner.firstname + ' ' + exam.examiner.lastname}}</li>
       </ul>
     </div>
     <div class="col-sm">
       <ul class="list-group">
-        <li (click)="goToExam(exam.id)" *ngFor="let exercise of exercises" class="list-group-item">
-          {{exercise.name + ', ' + exercise.examiner.firstname + ' ' + exercise.examiner.lastname}}</li>
+        <li (click)="goToExercise(exercise.id)" *ngFor="let exercise of exercises" class="list-group-item">
+          {{'Name: ' + exercise.name + ', Prüfer/Prüferin: ' + exercise.examiner.firstname + ' ' + exercise.examiner.lastname}}</li>
       </ul>
     </div>
   </div>
@@ -43,8 +43,8 @@
         <label>Code</label>
         <div class="input-group">
           <div class="input-group-prepend">
-            <button (click)="changePasswordState()" class="input-group-text"><i
-                [ngClass]="{'fa fa-eye': showPassword === true, 'fa fa-eye-slash': showPassword === false}"></i></button>
+            <button (click)="changePasswordState()" class="input-group-text"><em
+                [ngClass]="{'fa fa-eye': showPassword === true, 'fa fa-eye-slash': showPassword === false}"></em></button>
           </div>
           <input *ngIf="showPassword" type="text" class="form-control" formControlName="code">
           <input *ngIf="!showPassword" type="password" class="form-control" formControlName="code">
@@ -62,6 +62,6 @@
       </div>
     </div>
     <button class="btn btn-secondary" (click)="saveExam()">Speichern</button>
-  
+
   </form>
 </div>

@@ -1,0 +1,14 @@
+<li *ngIf="taskList.length !== 0" class="list-group">
+  <ol>
+    <li (mouseout)="hovered = false" (mouseover)="hovered = true"
+        [ngStyle]="{backgroundColor: hovered===true ? 'lightgrey' : ''}" class="list-group-item"
+        (click)="selectTask(task)" *ngFor="let task of taskList">
+      <a>{{task.name}}</a>
+      <span *ngIf="task.score !== 1">{{' - ' + task.score + ' Punkte'}}</span>
+      <span *ngIf="task.score === 1">{{' - ' + task.score + ' Punkt'}}</span>
+    </li>
+  </ol>
+</li>
+<div *ngIf="taskList.length === 0">
+  Bisher sind noch keine Aufgaben vorhanden
+</div>

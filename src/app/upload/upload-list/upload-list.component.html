@@ -1,6 +1,6 @@
-<li *ngIf="taskList.length !== 0" class="list-group-item">
+<li *ngIf="taskList.length !== 0" class="list-group">
   <ol>
-    <li *ngFor="let task of taskList">
+    <li class="list-group-item" *ngFor="let task of taskList">
       <a (click)="selectTask(task)">{{task.name}}</a>
       <span>{{' - ' + task.score + ' Punkte'}}</span>
     </li>

@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ExamService} from '../services/exam.service';
 import {Exam, Task, Exercise} from '../app.model';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { ExerciseService } from '../services/exercise.service';
+import {ExerciseService} from '../services/exercise.service';
+import {Route, Router} from '@angular/router';
 
 @Component({
   selector: 'app-examiner',
@@ -18,7 +19,7 @@ export class ExaminerComponent implements OnInit {
   public exam: Exam;
   public showPassword = false;
 
-  constructor(private examService: ExamService, private fb: FormBuilder, private exerciseService: ExerciseService) {
+  constructor(private examService: ExamService, private fb: FormBuilder, private exerciseService: ExerciseService, private router: Router) {
   }
 
   ngOnInit() {
@@ -32,10 +33,12 @@ export class ExaminerComponent implements OnInit {
   }
 
   goToExam(id: number) {
-    this.currentExamId = id;
-    this.examService.getExamById(this.currentExamId).subscribe((exam: Exam) => {
-      this.exam = exam;
-      this.form.reset(this.modelToForm(this.exam));
+    this.router.navigate(['/examiner/exam/', id]).then(r => {
+    });
+  }
+
+  goToExercise(id: number) {
+    this.router.navigate(['/examiner/exercise/', id]).then(r => {
     });
   }
 
@@ -85,4 +88,5 @@ export class ExaminerComponent implements OnInit {
   changePasswordState() {
     this.showPassword = !this.showPassword;
   }
+
 }

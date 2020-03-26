@@ -8,6 +8,8 @@ import {UploadComponent} from './upload/upload.component';
 import {GeneratePdfComponent} from './generate-pdf/generate-pdf.component';
 import {ExerciseDetailsComponent} from './exercise/exercise-details/exercise-details.component';
 import {ExaminerComponent} from './examiner/examiner.component';
+import {ExaminerExamComponent} from './examiner/examiner-exam/examiner-exam.component';
+import {ExaminerExerciseComponent} from './examiner/examiner-exercise/examiner-exercise.component';
 
 
 const routes: Routes = [
@@ -18,7 +20,9 @@ const routes: Routes = [
   {path: 'exercise/:id', component: ExerciseDetailsComponent},
   {path: 'upload', component: UploadComponent},
   {path: 'pdf', component: GeneratePdfComponent},
-  {path: 'examiner', component: ExaminerComponent}
+  {path: 'examiner', component: ExaminerComponent},
+  {path: 'examiner/exam/:id', component: ExaminerExamComponent},
+  {path: 'examiner/exercise/:id', component: ExaminerExerciseComponent}
 ];
 
 @NgModule({
