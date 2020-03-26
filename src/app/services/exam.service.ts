@@ -30,8 +30,9 @@ export class ExamService {
     return this.http.get(this.url + '/' + id);
   }
 
-  saveExam(id: number) {
-    return this.http.get(this.url + '/save' + '/' + id);
+  saveExam(exam: Exam) {
+    return this.http.post(this.url + '/save',
+    exam);
   }
 
 }

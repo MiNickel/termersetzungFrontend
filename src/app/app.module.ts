@@ -27,6 +27,8 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ExerciseDetailsComponent } from './exercise/exercise-details/exercise-details.component';
 import { ExerciseListComponent } from './exercise/exercise-list/exercise-list.component';
 import { ExaminerComponent } from './examiner/examiner.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
    declarations: [
@@ -56,11 +58,9 @@ import { ExaminerComponent } from './examiner/examiner.component';
       HttpClientModule,
       ReactiveFormsModule,
       NgbModalModule,
-      /* MathJaxModule.forRoot({
-         version: '2.7.5',
-         config: 'TeX-AMS_HTML',
-         hostname: 'cdnjs.cloudflare.com'
-      }) */
+      OwlDateTimeModule,
+      OwlNativeDateTimeModule,
+      BrowserAnimationsModule
    ],
    providers: [
       MainService,

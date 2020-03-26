@@ -46,3 +46,12 @@ a:hover {
     position: absolute;
     width: 1px;
 }
+
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+li.list-group-item:hover {
+    cursor: pointer;
+}

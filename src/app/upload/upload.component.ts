@@ -96,14 +96,11 @@ export class UploadComponent implements OnInit {
 
   public upload(event: any) {
     const test: Exam | Exercise = this.formToModel();
-    console.log(test);
     if (test instanceof Exam) {
       this.examService.uploadExam(test).subscribe(result => {
-        console.log(result);
       });
     } else if (test instanceof Exercise) {
       this.exerciseService.uploadExercise(test).subscribe(result => {
-        console.log(result);
       });
     }
   }

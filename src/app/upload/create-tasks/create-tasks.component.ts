@@ -33,6 +33,15 @@ export class CreateTasksComponent implements OnInit {
   private onTask(task: Task) {
     if (task !== undefined) {
       this.taskForm.reset(this.modelToForm(task));
+      this.steps.clear();
+      for (const step of task.steps) {
+        const stepGroup = new FormGroup({
+          step: new FormControl(step.step),
+          score: new FormControl(step.score),
+          conversion: new FormControl(step.conversion)
+        });
+        this.steps.push(stepGroup);
+      }
     }
   }
 
@@ -113,6 +122,8 @@ export class CreateTasksComponent implements OnInit {
   public saveTask() {
     if (this.taskForm.valid) {
       const task: Task = this.formToModel();
+      const steps = task.steps.filter(step => step.step != null);
+      task.steps = steps;
       this.emitTask.emit(task);
       this.createForm();
     } else {

@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-2">
     <app-upload-list></app-upload-list>
   </div>
-  <div class="col-md-9">
+  <div style="margin-right: 150px;" class="col-md">
     <form [formGroup]="form">
       <div class="form-row">
         <div class="col form-group">
@@ -29,7 +29,7 @@
             <small class="form-text text-muted">Nachname</small>
           </div>
         </ng-container>
-        
+
       </div>
       <div *ngIf="form.controls.isExam.value === 'false'" class="form-row">
         <div class="col form-group">

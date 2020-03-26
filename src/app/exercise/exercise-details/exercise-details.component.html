@@ -6,10 +6,10 @@
   </div>
   <div *ngIf="taskObject !== undefined" class="col-md-9">
     <div class="row">
-      <div class="col-sm">
+      <div class="float-left" style="margin-right: 15px;">
         <p *ngIf="taskObject.description !== undefined">{{taskObject.description}}</p>
       </div>
-      <div *ngIf="taskObject.steps[0].step !== ''" class="col-sm btn-group" role="group">
+      <div *ngIf="taskObject.steps[0].step !== ''" class="float-left btn-group" role="group">
         <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary"><app-mathjax [content]="'$$\\div$$'"></app-mathjax></button>
         <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary"><app-mathjax [content]="'$$\\cdot$$'"></app-mathjax></button>
         <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary"><app-mathjax [content]="'$$( )$$'"></app-mathjax></button>
