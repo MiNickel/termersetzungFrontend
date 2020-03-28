@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Task, Exam, Exercise, Examiner } from '../app.model';
-import { UploadListComponent } from './upload-list/upload-list.component';
-import { ExamService } from '../services/exam.service';
-import { ExerciseService } from '../services/exercise.service';
-import { TaskService } from '../services/task.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import {Task, Exam, Exercise, Examiner} from '../app.model';
+import {UploadListComponent} from './upload-list/upload-list.component';
+import {ExamService} from '../services/exam.service';
+import {ExerciseService} from '../services/exercise.service';
+import {TaskService} from '../services/task.service';
 
 @Component({
   selector: 'app-upload',
@@ -13,7 +13,7 @@ import { TaskService } from '../services/task.service';
 })
 export class UploadComponent implements OnInit {
 
-  @ViewChild(UploadListComponent, { static: false })
+  @ViewChild(UploadListComponent, {static: false})
   private uploadList: UploadListComponent;
 
   public form: FormGroup;
@@ -23,7 +23,8 @@ export class UploadComponent implements OnInit {
   public errorMessage: string;
 
   constructor(private fb: FormBuilder, private taskService: TaskService,
-              private examService: ExamService, private exerciseService: ExerciseService) { }
+              private examService: ExamService, private exerciseService: ExerciseService) {
+  }
 
   ngOnInit() {
     this.createForm();
@@ -84,7 +85,7 @@ export class UploadComponent implements OnInit {
   }
 
   public saveTask(task: Task) {
-    const taskIndex = this.tasks.findIndex(t => t.name === task.name);
+    const taskIndex = this.tasks.findIndex(t => t.id === task.id);
     if (taskIndex === -1) {
       this.tasks.push(task);
       this.uploadList.taskList.push(task);
@@ -94,7 +95,7 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  public upload(event: any) {
+  public upload() {
     const test: Exam | Exercise = this.formToModel();
     if (test instanceof Exam) {
       this.examService.uploadExam(test).subscribe(result => {

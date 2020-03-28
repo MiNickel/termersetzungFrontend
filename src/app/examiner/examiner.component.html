@@ -21,47 +21,4 @@
       </ul>
     </div>
   </div>
-  <form *ngIf="exam !== undefined" [formGroup]="form">
-    <div class="form-row">
-      <div class="col form-group">
-        <label>Name</label>
-        <input type="text" class="form-control" formControlName="name">
-      </div>
-      <ng-container formGroupName="examiner">
-        <div class="col form-group">
-          <label>Vorname des Prüfers/der Prüferin</label>
-          <input type="text" class="form-control" formControlName="firstname">
-        </div>
-        <div class="col form-group">
-          <label>Nachname des Prüfers/der Prüferin</label>
-          <input type="text" class="form-control" formControlName="lastname">
-        </div>
-      </ng-container>
-    </div>
-    <div class="form-row">
-      <div class="col form-group">
-        <label>Code</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <button (click)="changePasswordState()" class="input-group-text"><em
-                [ngClass]="{'fa fa-eye': showPassword === true, 'fa fa-eye-slash': showPassword === false}"></em></button>
-          </div>
-          <input *ngIf="showPassword" type="text" class="form-control" formControlName="code">
-          <input *ngIf="!showPassword" type="password" class="form-control" formControlName="code">
-        </div>
-      </div>
-      <div class="col form-group">
-        <label>Startdatum</label>
-        <input class="form-control" formControlName="startDate" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1">
-        <owl-date-time #dt1></owl-date-time>
-      </div>
-      <div class="col form-group">
-        <label>Enddatum</label>
-        <input class="form-control" formControlName="endDate" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2">
-        <owl-date-time #dt2></owl-date-time>
-      </div>
-    </div>
-    <button class="btn btn-secondary" (click)="saveExam()">Speichern</button>
-
-  </form>
 </div>

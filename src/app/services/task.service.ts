@@ -1,18 +1,19 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Task } from '../app.model';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Task} from '../app.model';
 
 @Injectable({providedIn: 'root'})
 export class TaskService {
 
-    public task = new BehaviorSubject<any>('');
+  public task = new BehaviorSubject<any>('');
 
-    public currentTask = this.task.asObservable();
+  public currentTask = this.task.asObservable();
 
-    constructor() { }
+  constructor() {
+  }
 
-    changeTask(task: Task) {
-        this.task.next(task);
-    }
+  changeTask(task: Task) {
+    this.task.next(task);
+  }
 
 }

@@ -70,7 +70,7 @@ export class ExaminerExamComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  upload(event: string) {
+  upload() {
     const exam: Exam = this.formToModel();
     this.examService.uploadExam(exam).subscribe(result => {
 
@@ -78,7 +78,7 @@ export class ExaminerExamComponent implements OnInit {
   }
 
   public saveTask(task: Task) {
-    const taskIndex = this.tasks.findIndex(t => t.name === task.name);
+    const taskIndex = this.tasks.findIndex(t => t.id === task.id);
     if (taskIndex === -1) {
       this.tasks.push(task);
       this.taskList.taskList.push(task);

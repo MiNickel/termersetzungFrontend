@@ -29,8 +29,10 @@
     </form>
     <hr>
     <div>
-      <app-create-tasks [task]="task" (emitTask)="saveTask($event)" (uploadTest)="upload($event)"></app-create-tasks>
+      <app-create-tasks [task]="task" (emitTask)="saveTask($event)"></app-create-tasks>
     </div>
+    <hr>
+    <button (click)="upload()" type="button" class="btn btn-secondary">Übung hochladen</button>
   </div>
 </div>
 

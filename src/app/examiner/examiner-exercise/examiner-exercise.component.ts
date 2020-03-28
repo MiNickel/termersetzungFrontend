@@ -14,7 +14,6 @@ import {TaskService} from '../../services/task.service';
 export class ExaminerExerciseComponent implements OnInit {
 
   public form: FormGroup;
-  public tasks: Task[] = [];
   public task: Task;
   public created = false;
 
@@ -32,6 +31,7 @@ export class ExaminerExerciseComponent implements OnInit {
       this.createForm(exercise);
       this.created = true;
       this.taskList.taskList = exercise.tasks;
+      console.log(this.taskList.taskList);
     });
     this.taskService.currentTask.subscribe((task: any) => {
       if (task !== '') {
@@ -59,22 +59,21 @@ export class ExaminerExerciseComponent implements OnInit {
       formValues.name.value,
       new Examiner(-1, formValues.examiner.get('firstname').value, formValues.examiner.get('lastname').value),
       formValues.category.value,
-      this.tasks
+      this.taskList.taskList
     );
   }
 
   public saveTask(task: Task) {
-    const taskIndex = this.tasks.findIndex(t => t.name === task.name);
+    console.log(task);
+    const taskIndex = this.taskList.taskList.findIndex(t => t.id === task.id);
     if (taskIndex === -1) {
-      this.tasks.push(task);
       this.taskList.taskList.push(task);
     } else {
-      this.tasks[taskIndex] = task;
       this.taskList.taskList[taskIndex] = task;
     }
   }
 
-  public upload(event: any) {
+  public upload() {
     const exercise: Exercise = this.formToModel();
     this.exerciseService.uploadExercise(exercise).subscribe(result => {
     });

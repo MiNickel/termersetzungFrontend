@@ -35,6 +35,9 @@ export class ExerciseDetailsComponent implements OnInit {
       });
     });
     this.exerciseService.currentTask.subscribe((task) => {
+      if (this.taskObject !== undefined) {
+        this.saveCurrentTask();
+      }
       if (task !== '') {
         this.taskObject = task;
         let taskFromLocalStorage: any = localStorage.getItem(task.name);
@@ -66,6 +69,15 @@ export class ExerciseDetailsComponent implements OnInit {
     });
   }
 
+  saveCurrentTask() {
+    const taskData = {
+      task: this.taskObject.steps[0].step,
+      steps: this.steps,
+      operations: this.operations
+    };
+    localStorage.setItem(this.taskObject.steps[0].step, JSON.stringify(taskData));
+  }
+
   onFocus(event: any) {
     this.activeInputElement = event.target;
   }
@@ -84,30 +96,10 @@ export class ExerciseDetailsComponent implements OnInit {
     this.exerciseService.checkTask(checkStepList).subscribe(result => {
       console.log(result);
     });
-    // LocalStorage Teil wird noch später gebraucht
-    /* this.mainService.applyTransformCheck(this.steps[this.steps.length - 1], this.operations[this.operations.length - 1], this.newTerm)
-      .subscribe((data) => {
-        if (data.result) {
-          this.steps.push('$' + this.newTerm + '$');
-          this.newTerm = '';
-
-          const taskData = {
-            task: this.taskObject.steps[0].step,
-            steps: this.steps,
-            operations: this.operations
-          };
-
-          localStorage.setItem(this.taskObject.steps[0].step, JSON.stringify(taskData));
-        }
-      });*/
   }
 
   editStep(index: number) {
-    if (this.editStepBool[index] !== true) {
-      this.editStepBool[index] = true;
-    } else {
-      this.editStepBool[index] = false;
-    }
+    this.editStepBool[index] = this.editStepBool[index] !== true;
   }
 
   nextStep() {

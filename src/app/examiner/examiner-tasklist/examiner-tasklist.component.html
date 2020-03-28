@@ -1,7 +1,7 @@
 <li *ngIf="taskList.length !== 0" class="list-group">
   <ol>
     <li (mouseout)="hovered = false" (mouseover)="hovered = true"
-        [ngStyle]="{backgroundColor: hovered===true ? 'lightgrey' : ''}" class="list-group-item"
+        class="list-group-item"
         (click)="selectTask(task)" *ngFor="let task of taskList">
       <a>{{task.name}}</a>
       <span *ngIf="task.score !== 1">{{' - ' + task.score + ' Punkte'}}</span>

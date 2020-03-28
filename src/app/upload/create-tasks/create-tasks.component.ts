@@ -10,10 +10,10 @@ import {Task} from 'src/app/app.model';
 export class CreateTasksComponent implements OnInit {
 
   @Output()
-  uploadTest = new EventEmitter<any>();
-
-  @Output()
   emitTask = new EventEmitter<Task>();
+
+  private counter = -1;
+  public error;
 
   @Input()
   public set task(task: Task) {
@@ -48,7 +48,7 @@ export class CreateTasksComponent implements OnInit {
 
   private createForm() {
     this.taskForm = this.fb.group({
-      id: [-1, Validators.required],
+      id: [this.counter, Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
       steps: this.fb.array([
@@ -98,7 +98,7 @@ export class CreateTasksComponent implements OnInit {
   private formToModel() {
     const formValues = this.taskForm.controls;
     return new Task(
-      -1,
+      formValues.id.value,
       formValues.name.value,
       formValues.description.value,
       formValues.steps.value,
@@ -118,15 +118,15 @@ export class CreateTasksComponent implements OnInit {
 
   public saveTask() {
     if (this.taskForm.valid) {
+      this.error = undefined;
       const task: Task = this.formToModel();
       task.steps = task.steps.filter(step => step.step != null);
       this.emitTask.emit(task);
+      this.counter -= 1;
       this.createForm();
+    } else {
+      this.error = 'Füllen Sie alle Felder aus.';
     }
-  }
-
-  public submit() {
-    this.uploadTest.emit('upload');
   }
 
 }
