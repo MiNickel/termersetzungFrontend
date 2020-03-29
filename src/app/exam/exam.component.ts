@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ExamService} from '../services/exam.service';
-import {Exam, ExamDto, Step, Task, TaskDto} from '../app.model';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { ExamService } from '../services/exam.service';
+import { Exam, ExamDto, Step, Task, TaskDto, StudentExam } from '../app.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-exam',
@@ -51,7 +51,6 @@ export class ExamComponent implements OnInit {
     this.error = undefined;
     this.examService.getExamForStudent(this.code).subscribe(examDto => {
       this.exam = examDto;
-      console.log(this.exam);
     }, e => {
       this.error = 'Falscher Code';
     });
@@ -66,7 +65,6 @@ export class ExamComponent implements OnInit {
   onFormChange() {
     this.form.get('taskState').valueChanges.subscribe(val => {
       this.examService.changeTaskState(this.taskObject.name, val);
-      console.log(typeof (val));
     });
   }
 
@@ -95,24 +93,30 @@ export class ExamComponent implements OnInit {
     this.steps.push('$' + this.newTerm + '$');
     this.newTerm = '';
     this.editStepBool.push(false);
-    console.log(this.steps.length);
-    console.log(this.operations.length);
   }
 
   finished() {
     this.saveCurrentTask();
     const tasks: TaskDto[] = this.exam.tasks;
+    const studentExam = new StudentExam(-1, [], this.exam.id);
     for (const task of tasks) {
-      let taskFromLocalStorage: any = localStorage.getItem(task.name);
+      let taskFromLocalStorage: any = localStorage.getItem(task.startTerm);
       taskFromLocalStorage = JSON.parse(taskFromLocalStorage);
       const steps = taskFromLocalStorage.steps;
       const operations = taskFromLocalStorage.operations;
       const taskSteps: Step[] = [];
-      for (let i = 0; i < steps - 1; i++) {
-        const step: Step = new Step(-1, steps[i], null, operations[i]);
+      for (let i = 0; i < steps.length - 1; i++) {
+        const step: Step = new Step(-1, steps[i].replace(/\$/g, ''), null, operations[i]);
         taskSteps.push(step);
       }
+      const lastStep: Step = new Step(-1, steps[steps.length - 1].replace(/\$/g, ''), null, null);
+      taskSteps.push(lastStep);
+      const examTask = new Task(task.id, task.name, task.description, taskSteps, task.score);
+      studentExam.tasks.push(examTask);
     }
+    this.examService.correctStudentExam(studentExam).subscribe(result => {
+
+    });
   }
 
 }

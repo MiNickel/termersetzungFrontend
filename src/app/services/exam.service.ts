@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Exam, ExamDto, TaskDto} from '../app.model';
+import {Exam, ExamDto, TaskDto, StudentExam} from '../app.model';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
@@ -54,6 +54,11 @@ export class ExamService {
   saveExam(exam: Exam) {
     return this.http.post(this.url + '/save',
       exam);
+  }
+
+  correctStudentExam(studentExam: StudentExam) {
+    return this.http.post(this.url + '/student',
+    studentExam);
   }
 
 }

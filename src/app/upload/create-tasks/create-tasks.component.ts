@@ -118,9 +118,11 @@ export class CreateTasksComponent implements OnInit {
 
   public saveTask() {
     if (this.taskForm.valid) {
+      console.log(this.steps);
       this.error = undefined;
       const task: Task = this.formToModel();
       task.steps = task.steps.filter(step => step.step != null);
+      console.log(task);
       this.emitTask.emit(task);
       this.counter -= 1;
       this.createForm();

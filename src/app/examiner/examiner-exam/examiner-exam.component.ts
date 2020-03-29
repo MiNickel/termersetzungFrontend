@@ -14,9 +14,8 @@ import {TaskService} from '../../services/task.service';
 export class ExaminerExamComponent implements OnInit {
 
   public form: FormGroup;
-  private showPassword: boolean;
+  public showPassword: boolean;
   public created = false;
-  public tasks: Task[] = [];
   public task: Task;
 
   @ViewChild(ExaminerTasklistComponent, {static: false})
@@ -34,6 +33,7 @@ export class ExaminerExamComponent implements OnInit {
     });
     this.taskService.currentTask.subscribe((task: any) => {
       if (task !== '') {
+        console.log(task);
         this.task = task;
       }
     });
@@ -59,7 +59,7 @@ export class ExaminerExamComponent implements OnInit {
       formValues.id.value,
       formValues.name.value,
       new Examiner(-1, formValues.examiner.get('firstname').value, formValues.examiner.get('lastname').value),
-      this.tasks,
+      this.taskList.taskList,
       formValues.code.value,
       formValues.startDate.value,
       formValues.endDate.value
@@ -72,18 +72,17 @@ export class ExaminerExamComponent implements OnInit {
 
   upload() {
     const exam: Exam = this.formToModel();
+    console.log(exam);
     this.examService.uploadExam(exam).subscribe(result => {
 
     });
   }
 
   public saveTask(task: Task) {
-    const taskIndex = this.tasks.findIndex(t => t.id === task.id);
+    const taskIndex = this.taskList.taskList.findIndex(t => t.id === task.id);
     if (taskIndex === -1) {
-      this.tasks.push(task);
       this.taskList.taskList.push(task);
     } else {
-      this.tasks[taskIndex] = task;
       this.taskList.taskList[taskIndex] = task;
     }
   }

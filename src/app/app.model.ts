@@ -25,6 +25,16 @@ export class ExamDto {
   }
 }
 
+export class StudentExam {
+    constructor(
+        public id: number,
+        public tasks: Task[],
+        public examId: number
+    ) {
+
+    }
+}
+
 export class Exercise {
     constructor(
         public id: number,
