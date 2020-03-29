@@ -12,6 +12,19 @@ export class Exam {
     }
 }
 
+export class ExamDto {
+  constructor(
+    public id: number,
+    public name: string,
+    public examiner: Examiner,
+    public tasks: TaskDto[],
+    public code: string,
+    public startDate: Date,
+    public endDate: Date
+  ) {
+  }
+}
+
 export class Exercise {
     constructor(
         public id: number,
@@ -33,6 +46,19 @@ export class Task {
     ) {
 
     }
+}
+
+export class TaskDto {
+  constructor(
+    public id: number,
+    public name: string,
+    public description: string,
+    public startTerm: string,
+    public score: number,
+    public examId: number,
+    public exerciseId: number,
+  ) {
+  }
 }
 
 export class Step {

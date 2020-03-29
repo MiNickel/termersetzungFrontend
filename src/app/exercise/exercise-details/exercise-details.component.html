@@ -1,12 +1,11 @@
 <div class="row">
   <div class="col-md-3">
     <app-exercise-list *ngIf="exercise" [taskList]="exercise.tasks">
-
     </app-exercise-list>
   </div>
   <div *ngIf="taskObject !== undefined" class="col-md-9">
     <div class="row">
-      <div *ngIf="taskObject.steps[0].step !== ''" class="btn-group col-md-6" role="group">
+      <div *ngIf="taskObject.steps[0].step !== ''" class="btn-group col" role="group">
         <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$\\div$$'"></app-mathjax>
         </button>
@@ -61,18 +60,18 @@
         </button>
       </div>
     </div>
-    <div class="row">
+    <div style="margin-top: 1rem" class="row">
       <div class="col">
-        <div *ngIf="taskObject.description !== undefined">{{taskObject.description}}</div>
+        <div *ngIf="taskObject.description !== undefined">{{'Beschreibung: ' + taskObject.description}}</div>
       </div>
     </div>
-    <hr *ngIf="taskObject.description !== undefined">
+    <hr style="margin-bottom: 1rem;" *ngIf="taskObject.description !== undefined">
 
     <ng-container *ngFor="let step of steps; let i = index;">
       <div class="form-group row" style="margin-bottom: 5px;">
-        <app-mathjax *ngIf="taskObject.steps[0].step !== undefined" class="col-sm-2 col-form-label" [content]="step">
+        <app-mathjax *ngIf="taskObject.steps[0].step !== undefined" class="col col-form-label" [content]="step">
         </app-mathjax>
-        <div class="col-sm-2">
+        <div class="col">
           <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.steps[0].step !== undefined"
                  type="text" class="form-control" [(ngModel)]="operations[i]"/>
         </div>
@@ -80,15 +79,17 @@
       </div>
       <div *ngIf="editStepBool[i]" class="form-group row">
         <input placeholder="Term bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step" type="text"
-               class="form-control col-sm-2">
+               class="form-control col">
       </div>
     </ng-container>
     <div class="form-group row">
-      <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text"
-             class="form-control col-sm-2">
+      <div class="col">
+        <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text"
+               class="form-control">
+      </div>
     </div>
     <div class="form-group row">
-      <app-mathjax *ngIf="newTerm !==''" class="col-2" [content]="'$' + newTerm + '$'"></app-mathjax>
+      <app-mathjax *ngIf="newTerm !==''" class="col" [content]="'$' + newTerm + '$'"></app-mathjax>
     </div>
     <div class="form-group row">
       <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="check()">Umformungen prüfen

@@ -23,7 +23,7 @@ export class ExerciseDetailsComponent implements OnInit {
 
   public form: FormGroup;
 
-  constructor(private route: ActivatedRoute, private exerciseService: ExerciseService, private mainService: MainService,
+  constructor(private route: ActivatedRoute, private exerciseService: ExerciseService,
               private fb: FormBuilder) {
   }
 

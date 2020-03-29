@@ -5,19 +5,136 @@
       <p>Geben Sie hier den Code für die Klausur ein</p>
       <input [(ngModel)]="code" type="text" class="form-control" placeholder="Code" aria-label="Code">
       <br>
-      <button (click)="submit()" type="button" class="btn btn-light">Enter</button>
+      <app-error [error]="error"></app-error>
+      <button (click)="getExam()" type="button" class="btn btn-light">Enter</button>
     </div>
   </div>
 </div>
 <div *ngIf="exam !== undefined" class="row">
   <div class="col-md-3">
-    <app-exam-list [exam]="exam">
+    <app-exam-list [taskList]="exam.tasks">
 
     </app-exam-list>
   </div>
-  <div class="col-md-9">
-    <app-main-task>
+  <div *ngIf="taskObject !== undefined" class="col-md-9">
+    <div class="row">
+      <div *ngIf="taskObject.startTerm !== ''" class="btn-group col" role="group">
+        <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\div$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\cdot$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$( )$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$x^n$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\sqrt x$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\sin(x)$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\cos(x)$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$ \\vert \\vert $$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$!$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$ \\int$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\sum$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\coprod$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\cup$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$\\cap$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$F^\\prime$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
+                class="btn btn-secondary">
+          <app-mathjax [content]="'$$(f^\\prime)^\\prime$$'"></app-mathjax>
+        </button>
+        <button (click)="setSymbol('det')" type="button" class="btn btn-secondary">
+          <app-mathjax [content]="'$$det$$'"></app-mathjax>
+        </button>
+      </div>
+    </div>
+    <div style="margin-top: 1rem" class="row">
+      <div class="col">
+        <div *ngIf="taskObject.description !== undefined">{{'Beschreibung: ' + taskObject.description}}</div>
+      </div>
+    </div>
+    <hr style="margin-bottom: 1rem;" *ngIf="taskObject.description !== undefined">
 
-    </app-main-task>
+    <ng-container *ngFor="let step of steps; let i = index;">
+      <div class="form-group row" style="margin-bottom: 5px;">
+        <app-mathjax *ngIf="taskObject.startTerm !== undefined" class="col col-form-label" [content]="step">
+        </app-mathjax>
+        <div class="col">
+          <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.startTerm !== undefined"
+                 type="text" class="form-control" [(ngModel)]="operations[i]"/>
+        </div>
+        <button (click)="editStep(i)" *ngIf="i !== 0" type="button" class="btn btn-light">Edit</button>
+      </div>
+      <div *ngIf="editStepBool[i]" class="form-group row">
+        <input placeholder="Term bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step" type="text"
+               class="form-control col">
+      </div>
+    </ng-container>
+    <div class="form-group row">
+      <div class="col">
+        <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text"
+               class="form-control">
+      </div>
+    </div>
+    <div class="form-group row">
+      <app-mathjax *ngIf="newTerm !==''" class="col" [content]="'$' + newTerm + '$'"></app-mathjax>
+    </div>
+    <div class="form-group row">
+      <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt
+      </button>
+      <button type="button" class="btn btn-light" (click)="finished()">Fertig</button>
+    </div>
+    <div class="form-group row">
+      <form [formGroup]="form">
+        <div class="form-check-inline">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" checked formControlName="taskState" value="nicht gelesen">noch
+            nicht gelesen
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="taskState" value="in Arbeit">in Arbeit
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="taskState"
+                   value="zurückgestellt">zurückgestellt
+          </label>
+        </div>
+        <div class="form-check-inline">
+          <label class="form-check-label">
+            <input type="radio" class="form-check-input" formControlName="taskState" value="Fertig">Fertig
+          </label>
+        </div>
+      </form>
+    </div>
+    <br>
   </div>
 </div>

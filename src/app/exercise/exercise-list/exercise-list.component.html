@@ -1,4 +1,5 @@
 <ol *ngIf="taskList.length !== 0" class="list-group">
+  <p style="text-align: center">Aufgaben</p>
   <ul *ngFor="let task of taskList">
     <li (click)="selectTask(task)" class="list-group-item" [ngClass]="{'list-group-item-secondary': task.name === activeTask.name}">
       <span>{{task.name}}</span>
