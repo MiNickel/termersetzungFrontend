@@ -3,7 +3,8 @@
   <ul *ngFor="let task of taskList">
     <li (click)="selectTask(task)" class="list-group-item" [ngClass]="{'list-group-item-secondary': task.name === activeTask.name}">
       <span>{{task.name}}</span>
-      <span>{{' - ' + task.score + ' Punkte'}}</span>
+      <span *ngIf="task.score !== 1">{{' - ' + task.score + ' Punkte'}}</span>
+      <span *ngIf="task.score === 1">{{' - ' + task.score + ' Punkt'}}</span>
       <ul *ngIf="taskStateMap.get(task.name) !== undefined">
         <li>{{taskStateMap.get(task.name)}}</li>
       </ul>

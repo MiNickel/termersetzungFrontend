@@ -10,7 +10,7 @@ import {TaskService} from '../../services/task.service';
 export class ExaminerTasklistComponent implements OnInit {
 
   public taskList: Task[] = [];
-  public hovered: boolean;
+  public activeTask = new Task(-1, '', '', [], 0);
 
   constructor(private taskService: TaskService) {
   }
@@ -19,6 +19,7 @@ export class ExaminerTasklistComponent implements OnInit {
   }
 
   public selectTask(task: Task) {
+    this.activeTask = task;
     this.taskService.changeTask(task);
   }
 

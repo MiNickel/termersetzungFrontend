@@ -15,8 +15,7 @@ export class ExamListComponent implements OnInit {
   public activeTask = new TaskDto(-1, '', '', '', 0, 0, 0);
   public taskStateMap: Map<string, string> = new Map();
 
-  constructor(private mainService: MainService,
-              private examService: ExamService) {
+  constructor(private examService: ExamService) {
   }
 
   ngOnInit() {

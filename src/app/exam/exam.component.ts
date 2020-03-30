@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ExamService } from '../services/exam.service';
-import { Exam, ExamDto, Step, Task, TaskDto, StudentExam } from '../app.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {ExamService} from '../services/exam.service';
+import {Exam, ExamDto, Step, Task, TaskDto, StudentExam} from '../app.model';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-exam',

@@ -1,9 +1,10 @@
 <li *ngIf="taskList.length !== 0" class="list-group">
-  <ol>
-    <li (mouseout)="hovered = false" (mouseover)="hovered = true"
-        class="list-group-item"
-        (click)="selectTask(task)" *ngFor="let task of taskList">
-      <a>{{task.name}}</a>
+  <p style="text-align: center">Aufgaben</p>
+  <ol *ngFor="let task of taskList">
+    <li
+      class="list-group-item" [ngClass]="{'list-group-item-secondary': task.name === activeTask.name}"
+      (click)="selectTask(task)">
+      <span>{{task.name}}</span>
       <span *ngIf="task.score !== 1">{{' - ' + task.score + ' Punkte'}}</span>
       <span *ngIf="task.score === 1">{{' - ' + task.score + ' Punkt'}}</span>
     </li>
