@@ -11,13 +11,13 @@
     <div class="col-sm">
       <ul class="list-group">
         <li (click)="goToExam(exam.id)" *ngFor="let exam of exams" class="list-group-item">
-          {{'Name: ' + exam.name + ', Prüfer/Prüferin: ' + exam.examiner.firstname + ' ' + exam.examiner.lastname}}</li>
+          {{exam.name}}</li>
       </ul>
     </div>
     <div class="col-sm">
       <ul class="list-group">
         <li (click)="goToExercise(exercise.id)" *ngFor="let exercise of exercises" class="list-group-item">
-          {{'Name: ' + exercise.name + ', Prüfer/Prüferin: ' + exercise.examiner.firstname + ' ' + exercise.examiner.lastname}}</li>
+          {{exercise.name}}</li>
       </ul>
     </div>
   </div>

@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {ExamService} from '../services/exam.service';
-import {Exam, Task, Exercise} from '../app.model';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ExerciseService} from '../services/exercise.service';
-import {Route, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ExamService } from '../services/exam.service';
+import { Exam, Task, Exercise } from '../app.model';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ExerciseService } from '../services/exercise.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-examiner',
@@ -19,10 +19,13 @@ export class ExaminerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.examService.getAllExamsForExaminer().subscribe((exams: Exam[]) => {
+    const currentUser = localStorage.getItem('currentUser');
+    const jsonObject = JSON.parse(currentUser);
+    const examinerId: number = jsonObject.examinerId;
+    this.examService.getAllExamsForExaminer(examinerId).subscribe((exams: Exam[]) => {
       this.exams = exams;
     });
-    this.exerciseService.getAllExercises().subscribe((exercises: Exercise[]) => {
+    this.exerciseService.getAllExercisesForExaminer(examinerId).subscribe((exercises: Exercise[]) => {
       this.exercises = exercises;
     });
   }

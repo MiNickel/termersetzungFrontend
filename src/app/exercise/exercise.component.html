@@ -1,26 +1,24 @@
-<div *ngIf="exercises" class="container">
-  <div *ngFor="let row of array(numberOfRows); let i=index" class="row">
+<div *ngIf="exercises && studentExercises" class="container">
+  <div class="row">
+    <div class="col-sm" style="text-align: center;">
+      <h5>Offene Übungen</h5>
+    </div>
+    <div class="col-sm" style="text-align: center;">
+      <h5>Fertige Übungen</h5>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-sm">
-      <div (click)="openExercise(3*i+0)" *ngIf="exercises[3*i+0] !== undefined" class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{exercises[3*i+0].name}}</h5>
-          <p class="card-text">{{exercises[3*i+0].category}}</p>
-        </div>
-      </div>
+      <ul class="list-group">
+        <li (click)="openExercise(exercise.id)" *ngFor="let exercise of exercises" class="list-group-item">
+          {{exercise.name}}</li>
+      </ul>
     </div>
     <div class="col-sm">
-      <div (click)="openExercise(3*i+1)" *ngIf="exercises[3*i+1] !== undefined" class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{exercises[3*i+1].name}}</h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm">
-      <div (click)="openExercise(3*i+2)" *ngIf="exercises[3*i+2] !== undefined" class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{exercises[3*i+2].name}}</h5>
-        </div>
-      </div>
+      <ul class="list-group">
+        <li (click)="openExercise(studentExercise.id)" *ngFor="let studentExercise of studentExercises" class="list-group-item">
+          {{studentExercise.name}}</li>
+      </ul>
     </div>
   </div>
 </div>

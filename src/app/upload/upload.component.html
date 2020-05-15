@@ -17,19 +17,18 @@
           <input type="text" class="form-control" formControlName="name">
           <small class="form-text text-muted">Name der Klausur/Übung</small>
         </div>
-        <ng-container formGroupName="examiner">
-          <div class="col form-group">
-            <label>Prüfer/Prüferin</label>
-            <input type="text" class="form-control" formControlName="firstname">
-            <small class="form-text text-muted">Vorname</small>
-          </div>
-          <div class="col form-group">
-            <label>Prüfer/Prüferin</label>
-            <input type="text" class="form-control" formControlName="lastname">
-            <small class="form-text text-muted">Nachname</small>
-          </div>
-        </ng-container>
-
+      </div>
+      <div *ngIf="form.controls.isExam.value === 'true'" class="form-row">
+        <div class="col form-group">
+          <label>Startdatum</label>
+          <input class="form-control" formControlName="startDate" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1">
+          <owl-date-time #dt1></owl-date-time>
+        </div>
+        <div class="col form-group">
+          <label>Enddatum</label>
+          <input class="form-control" formControlName="endDate" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2">
+          <owl-date-time #dt2></owl-date-time>
+        </div>
       </div>
       <div *ngIf="form.controls.isExam.value === 'false'" class="form-row">
         <div class="col form-group">
@@ -44,7 +43,8 @@
     </form>
     <hr>
     <div>
-      <app-create-tasks [task]="task" (emitTask)="saveTask($event)"></app-create-tasks>
+      <app-create-tasks (deselectTask)="deselectActiveTask($event)" (emitTask)="saveTask($event)"
+        (deleteTask)="deleteTask($event)"></app-create-tasks>
     </div>
     <hr>
     <button (click)="upload()" type="button" class="btn btn-secondary">Klausur/Übung hochladen</button>

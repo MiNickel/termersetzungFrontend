@@ -9,10 +9,9 @@ import { ExerciseService } from 'src/app/services/exercise.service';
 })
 export class ExerciseListComponent implements OnInit {
 
-  @Input()
-  public taskList: Task[];
+  public taskList: Task[] = [];
 
-  public activeTask = new Task(-1, '', '', [], 0);
+  public activeTask = new Task(-1, '', '', [], 0, 0, 0, 0, 0);
 
   public taskStateMap: Map<string, string> = new Map();
 

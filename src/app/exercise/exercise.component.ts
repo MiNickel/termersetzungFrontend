@@ -10,15 +10,22 @@ import { Router } from '@angular/router';
 })
 export class ExerciseComponent implements OnInit {
 
+  public studentExercises: Exercise[];
   public exercises: Exercise[];
-  public numberOfRows: number;
 
   constructor(private exerciseService: ExerciseService, private router: Router) { }
 
   ngOnInit() {
+    const currentUser = localStorage.getItem('currentUser');
+    const jsonObject = JSON.parse(currentUser);
+    const studentId: number = jsonObject.studentId;
+
+    this.exerciseService.getAllExercisesForStudent(studentId).subscribe((exercises: Exercise[]) => {
+      this.studentExercises = exercises;
+    });
     this.exerciseService.getAllExercises().subscribe((exercises: Exercise[]) => {
+      console.log(exercises);
       this.exercises = exercises;
-      this.numberOfRows = Math.ceil(exercises.length / 3);
     });
   }
 
@@ -26,8 +33,8 @@ export class ExerciseComponent implements OnInit {
     return Array(n);
   }
 
-  public openExercise(index: number) {
-    this.router.navigate(['/exercise', this.exercises[index].id]);
+  public openExercise(exerciseId: number) {
+    this.router.navigate(['/exercise', exerciseId]);
   }
 
 }

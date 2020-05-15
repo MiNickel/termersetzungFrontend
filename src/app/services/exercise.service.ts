@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Exercise, Task, CheckStep } from '../app.model';
+import { Exercise, Task, CheckStep, Exam, StudentExercise } from '../app.model';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -26,12 +26,24 @@ export class ExerciseService {
         this.task.next(task);
     }
 
+    getAllExercisesForExaminer(examinerId: number) {
+        return this.http.get<Exercise[]>(this.url + '/examiner/' + examinerId);
+    }
+
+    getAllExercisesForStudent(studentId: number) {
+        return this.http.get<Exercise[]>(this.url + '/student/' + studentId);
+    }
+
     getAllExercises() {
-        return this.http.get<Exercise[]>(this.url);
+        return this.http.get<Exercise[]>(this.url + '/student');
     }
 
     getExerciseById(id: number) {
         return this.http.get<Exercise>(this.url + '/' + id);
+    }
+
+    getStudentExerciseByExerciseIdAndStudentId(exerciseId: number, studentId: number) {
+        return this.http.get<StudentExercise>(this.url + '/' + exerciseId + '/' + studentId);
     }
 
     uploadExercise(exercise: Exercise) {

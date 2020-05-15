@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {Task} from '../../app.model';
 import {TaskService} from '../../services/task.service';
 
@@ -10,7 +10,10 @@ import {TaskService} from '../../services/task.service';
 export class ExaminerTasklistComponent implements OnInit {
 
   public taskList: Task[] = [];
-  public activeTask = new Task(-1, '', '', [], 0);
+  public activeTask = new Task(-1, '', '', [], 0, 0, 0, 0, 0);
+
+  @Input()
+  type: string;
 
   constructor(private taskService: TaskService) {
   }
@@ -20,7 +23,16 @@ export class ExaminerTasklistComponent implements OnInit {
 
   public selectTask(task: Task) {
     this.activeTask = task;
-    this.taskService.changeTask(task);
+    if (this.type === 'exercise') {
+      this.taskService.changeTaskExaminerExercise(task);
+    } else if (this.type === 'exam') {
+      console.log('aasdasd');
+      this.taskService.changeTaskExaminerExam(task);
+    }
+  }
+
+  public deselectTask() {
+    this.activeTask = new Task(-1, '', '', [], 0, 0, 0, 0, 0);
   }
 
 }

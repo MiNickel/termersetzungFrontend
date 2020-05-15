@@ -1,19 +1,16 @@
 <div class="row">
-  <div class="col-md-3">
-    <app-exercise-list *ngIf="exercise" [taskList]="exercise.tasks">
+  <div class="col-md-2">
+    <app-exercise-list>
     </app-exercise-list>
   </div>
-  <div *ngIf="taskObject !== undefined" class="col-md-9">
-    <div class="row">
-      <div *ngIf="taskObject.steps[0].step !== ''" class="btn-group col" role="group">
+  <div *ngIf="task !== undefined" class="col-md-10">
+    <div class="form-row">
+      <div *ngIf="task.steps[0].step !== ''" class="btn-group col-md-7" role="group">
         <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$\\div$$'"></app-mathjax>
         </button>
         <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$\\cdot$$'"></app-mathjax>
-        </button>
-        <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$( )$$'"></app-mathjax>
         </button>
         <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$x^n$$'"></app-mathjax>
@@ -29,9 +26,6 @@
         </button>
         <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$ \\vert \\vert $$'"></app-mathjax>
-        </button>
-        <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$!$$'"></app-mathjax>
         </button>
         <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$ \\int$$'"></app-mathjax>
@@ -51,55 +45,64 @@
         <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$F^\\prime$$'"></app-mathjax>
         </button>
-        <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
-                class="btn btn-secondary">
+        <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button" class="btn btn-secondary">
           <app-mathjax [content]="'$$(f^\\prime)^\\prime$$'"></app-mathjax>
         </button>
-        <button (click)="setSymbol('det')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$det$$'"></app-mathjax>
-        </button>
+      </div>
+      <div class="col-md-5">
+        <textarea class="form-control" rows="4" placeholder="Hier können Sie Notizen machen"></textarea>
       </div>
     </div>
     <div style="margin-top: 1rem" class="row">
       <div class="col">
-        <div *ngIf="taskObject.description !== undefined">{{'Beschreibung: ' + taskObject.description}}</div>
+        <div *ngIf="task.description !== undefined">{{'Aufgabenbeschreibung: ' + task.description}}</div>
       </div>
     </div>
-    <hr style="margin-bottom: 1rem;" *ngIf="taskObject.description !== undefined">
+    <hr style="margin-bottom: 1rem;" *ngIf="task.description !== undefined">
 
     <ng-container *ngFor="let step of steps; let i = index;">
       <div class="form-group row" style="margin-bottom: 5px;">
-        <app-mathjax *ngIf="taskObject.steps[0].step !== undefined" class="col col-form-label" [content]="step">
-        </app-mathjax>
-        <div class="col">
-          <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.steps[0].step !== undefined"
-                 type="text" class="form-control" [(ngModel)]="operations[i]"/>
+        <div [ngClass]="{'alert alert-danger': conversions[i-1] === false}" *ngIf="!editStepBool[i]" class="col-md-5">
+          <app-mathjax *ngIf="task.steps[0].step !== undefined" [content]="step"></app-mathjax>
         </div>
-        <button (click)="editStep(i)" *ngIf="i !== 0" type="button" class="btn btn-light">Edit</button>
+        <div *ngIf="editStepBool[i] && editStepMap.get(i) !== undefined" class="col-md-5">
+          <app-mathjax *ngIf="task.steps[0].step !== undefined" [content]="'$' + editStepMap.get(i) + '$'"></app-mathjax>
+        </div>
+        <div [ngClass]="{'col-md-6': i == 0, 'col-md-5': i !== 0}">
+          <input [style.background-color]="(conversions[i] === false) ? '#f8d7da' : '#fff'" placeholder="Umformung" (focus)="onFocus($event)" *ngIf="task.steps[0].step !== undefined"
+            type="text" class="form-control" [(ngModel)]="operations[i]" />
+        </div>
+        <div *ngIf="i !== 0" class="col-md-1">
+          <button (click)="editStep(i, step)" type="button" class="btn btn-light">Edit</button>
+        </div>
       </div>
-      <div *ngIf="editStepBool[i]" class="form-group row">
-        <input placeholder="Term bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step" type="text"
-               class="form-control col">
+      <div *ngIf="editStepBool[i] && editStepMap.get(i) !== undefined" class="form-group row">
+        <div class="col-md-11">
+          <input placeholder="Term bearbeiten" (focus)="onFocus($event)" [ngModel]="editStepMap.get(i)"
+          (ngModelChange)="editStepMap.set(i, $event)" type="text" class="form-control col">
+        </div>
       </div>
     </ng-container>
     <div class="form-group row">
-      <div class="col">
+      <div class="col-md-11">
         <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text"
-               class="form-control">
+          class="form-control">
       </div>
     </div>
     <div class="form-group row">
       <app-mathjax *ngIf="newTerm !==''" class="col" [content]="'$' + newTerm + '$'"></app-mathjax>
     </div>
     <div class="form-group row">
-      <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="check()">Umformungen prüfen
-      </button>
-      <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt
-      </button>
-      <button type="button" class="btn btn-light" (click)="finished()">Fertig</button>
+      <div class="col">
+        <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="check()">Umformungen prüfen
+        </button>
+        <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt
+        </button>
+        <button type="button" class="btn btn-light" (click)="finished()">Fertig</button>
+      </div>
     </div>
     <div class="form-group row">
-      <form [formGroup]="form">
+      <form class="col" [formGroup]="form">
         <div class="form-check-inline">
           <label class="form-check-label">
             <input type="radio" class="form-check-input" checked formControlName="taskState" value="nicht gelesen">noch
@@ -114,7 +117,7 @@
         <div class="form-check-inline">
           <label class="form-check-label">
             <input type="radio" class="form-check-input" formControlName="taskState"
-                   value="zurückgestellt">zurückgestellt
+              value="zurückgestellt">zurückgestellt
           </label>
         </div>
         <div class="form-check-inline">

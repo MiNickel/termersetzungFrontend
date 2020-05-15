@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Task} from 'src/app/app.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Task } from 'src/app/app.model';
 
 @Component({
   selector: 'app-create-tasks',
@@ -12,17 +12,25 @@ export class CreateTasksComponent implements OnInit {
   @Output()
   emitTask = new EventEmitter<Task>();
 
+  @Output()
+  deleteTask = new EventEmitter<number>();
+
+  @Output()
+  deselectTask = new EventEmitter<string>();
+
   private counter = -1;
   public error;
 
   @Input()
   public set task(task: Task) {
     this.createForm();
+    console.log('tas');
     this.onTask(task);
   }
 
   public taskForm: FormGroup;
   public activeInputElement: any;
+  public taskIsRemovable = false;
 
   constructor(private fb: FormBuilder) {
   }
@@ -33,6 +41,7 @@ export class CreateTasksComponent implements OnInit {
 
   private onTask(task: Task) {
     if (task instanceof Object) {
+      this.taskIsRemovable = true;
       this.taskForm.reset(this.modelToForm(task));
       this.steps.clear();
       for (const step of task.steps) {
@@ -102,7 +111,11 @@ export class CreateTasksComponent implements OnInit {
       formValues.name.value,
       formValues.description.value,
       formValues.steps.value,
-      formValues.score.value
+      formValues.score.value,
+      0,
+      0,
+      0,
+      0
     );
   }
 
@@ -118,17 +131,31 @@ export class CreateTasksComponent implements OnInit {
 
   public saveTask() {
     if (this.taskForm.valid) {
-      console.log(this.steps);
       this.error = undefined;
       const task: Task = this.formToModel();
-      task.steps = task.steps.filter(step => step.step != null);
-      console.log(task);
-      this.emitTask.emit(task);
-      this.counter -= 1;
-      this.createForm();
+      task.steps = task.steps.filter(step => step.step != null && step.score != null);
+      if (task.steps.length > 1) {
+        this.emitTask.emit(task);
+        this.counter -= 1;
+        this.createForm();
+      } else {
+        this.error = 'Vervollständigen Sie die Zwischenschritte.';
+      }
     } else {
       this.error = 'Füllen Sie alle Felder aus.';
     }
+  }
+
+  public removeTask() {
+    const taskId: number = this.taskForm.controls.id.value;
+    this.deleteTask.emit(taskId);
+    this.createForm();
+  }
+
+  public refreshForm() {
+    this.taskIsRemovable = false;
+    this.deselectTask.emit('deselect');
+    this.createForm();
   }
 
 }

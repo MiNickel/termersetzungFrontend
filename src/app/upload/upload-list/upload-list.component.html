@@ -1,7 +1,8 @@
 <li *ngIf="taskList.length !== 0" class="list-group">
-  <ol>
-    <li class="list-group-item" *ngFor="let task of taskList">
-      <a (click)="selectTask(task)">{{task.name}}</a>
+  <ol *ngFor="let task of taskList">
+    <li class="list-group-item" [ngClass]="{'list-group-item-secondary': task.name === activeTask.name}"
+      (click)="selectTask(task)">
+      <span>{{task.name}}</span>
       <span>{{' - ' + task.score + ' Punkte'}}</span>
     </li>
   </ol>

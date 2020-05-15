@@ -1,10 +1,15 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
-import {Task, Exam, Exercise, Examiner} from '../app.model';
-import {UploadListComponent} from './upload-list/upload-list.component';
-import {ExamService} from '../services/exam.service';
-import {ExerciseService} from '../services/exercise.service';
-import {TaskService} from '../services/task.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Task, Exam, Exercise, Examiner } from '../app.model';
+import { UploadListComponent } from './upload-list/upload-list.component';
+import { ExamService } from '../services/exam.service';
+import { ExerciseService } from '../services/exercise.service';
+import { TaskService } from '../services/task.service';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SuccessModalComponent } from '../modal/success-modal/success-modal.component';
+import { ConfirmModalComponent } from '../modal/confirm-modal/confirm-modal.component';
+import { CreateTasksComponent } from './create-tasks/create-tasks.component';
 
 @Component({
   selector: 'app-upload',
@@ -13,24 +18,27 @@ import {TaskService} from '../services/task.service';
 })
 export class UploadComponent implements OnInit {
 
-  @ViewChild(UploadListComponent, {static: false})
+  @ViewChild(UploadListComponent, { static: false })
   private uploadList: UploadListComponent;
 
+  @ViewChild(CreateTasksComponent, { static: false })
+  private createTasks: CreateTasksComponent;
+
   public form: FormGroup;
-  public tasks: Task[] = [];
-  public task: Task;
   public updateInfo = true;
   public errorMessage: string;
 
   constructor(private fb: FormBuilder, private taskService: TaskService,
-              private examService: ExamService, private exerciseService: ExerciseService) {
+              private examService: ExamService, private exerciseService: ExerciseService,
+              private modalService: NgbModal) {
   }
 
   ngOnInit() {
     this.createForm();
-    this.taskService.currentTask.subscribe((task: any) => {
+    this.taskService.currentTaskUpload.subscribe((task: any) => {
+      console.log(task);
       if (task !== '') {
-        this.task = task;
+        this.createTasks.task = task;
       }
     });
   }
@@ -39,70 +47,84 @@ export class UploadComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', Validators.required],
       isExam: [null, Validators.required],
-      examiner: new FormGroup({
-        firstname: new FormControl(''),
-        lastname: new FormControl('')
-      }),
-      category: ['', Validators.required]
+      category: ['', Validators.required],
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required]
     });
   }
 
   private formToModel() {
     const formValues = this.form.controls;
     formValues.isExam.setValue((formValues.isExam.value === 'true'));
+    const examinerId: number = this.getExaminerId();
     if (formValues.isExam.value === true) {
       return new Exam(
         -1,
         formValues.name.value,
-        new Examiner(-1, formValues.examiner.get('firstname').value, formValues.examiner.get('lastname').value),
-        this.tasks,
+        examinerId,
+        this.uploadList.taskList,
         '',
-        null,
-        null
+        formValues.startDate.value,
+        formValues.endDate.value
       );
     } else {
       return new Exercise(
         -1,
         formValues.name.value,
-        new Examiner(-1, formValues.examiner.get('firstname').value, formValues.examiner.get('lastname').value),
+        examinerId,
         formValues.category.value,
-        this.tasks
+        this.uploadList.taskList
       );
     }
   }
 
-  public createTasks() {
-    if (this.form.valid) {
-      this.updateInfo = false;
-    } else {
-      this.errorMessage = 'Sie müssen alle Felder ausfüllen.';
-    }
-  }
-
-  public getTasks(tasks: Task[]) {
-    this.tasks = tasks;
-    this.updateInfo = true;
+  private getExaminerId() {
+    const currentUser = localStorage.getItem('currentUser');
+    const jsonObject = JSON.parse(currentUser);
+    const examinerId: number = jsonObject.examinerId;
+    return examinerId;
   }
 
   public saveTask(task: Task) {
-    const taskIndex = this.tasks.findIndex(t => t.id === task.id);
+    const taskIndex = this.uploadList.taskList.findIndex(t => t.id === task.id);
     if (taskIndex === -1) {
-      this.tasks.push(task);
       this.uploadList.taskList.push(task);
     } else {
-      this.tasks[taskIndex] = task;
       this.uploadList.taskList[taskIndex] = task;
     }
   }
 
-  public upload() {
-    const test: Exam | Exercise = this.formToModel();
-    if (test instanceof Exam) {
-      this.examService.uploadExam(test).subscribe(result => {
-      });
-    } else if (test instanceof Exercise) {
-      this.exerciseService.uploadExercise(test).subscribe(result => {
-      });
+  public deleteTask(taskId: number) {
+    const taskIndex = this.uploadList.taskList.findIndex(t => t.id === taskId);
+    if (taskIndex) {
+      this.uploadList.taskList = this.uploadList.taskList.filter(task => task.id !== taskId);
     }
+  }
+
+  public deselectActiveTask(event: any) {
+    console.log('dog');
+    this.uploadList.deselectTask();
+  }
+
+  public upload() {
+    const me = this;
+    const modalRefConfirm = me.modalService.open(ConfirmModalComponent).result.then(confirmation => {
+      if (confirmation === 'yes') {
+        const test: Exam | Exercise = this.formToModel();
+        if (test instanceof Exam) {
+          this.examService.uploadExam(test).subscribe(result => {
+            me.createForm();
+            this.uploadList.taskList = [];
+            const modalRefSuccess = me.modalService.open(SuccessModalComponent);
+          });
+        } else if (test instanceof Exercise) {
+          this.exerciseService.uploadExercise(test).subscribe(result => {
+            me.createForm();
+            this.uploadList.taskList = [];
+            const modalRefSuccess = me.modalService.open(SuccessModalComponent);
+          });
+        }
+      }
+    });
   }
 }

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Exam, ExamDto, TaskDto, StudentExam} from '../app.model';
+import {Exam, StudentExam, Task} from '../app.model';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class ExamService {
     this.taskState.next({key, value});
   }
 
-  changeTask(task: TaskDto) {
+  changeTask(task: Task) {
     this.task.next(task);
   }
 
@@ -34,7 +34,7 @@ export class ExamService {
   }
 
   getExamForStudent(code: string) {
-    return this.http.get<ExamDto>(this.url + '/student?code=' + code);
+    return this.http.get<Exam>(this.url + '/student?code=' + code);
   }
 
   uploadExam(exam: Exam) {
@@ -43,8 +43,8 @@ export class ExamService {
     );
   }
 
-  getAllExamsForExaminer() {
-    return this.http.get(this.url + '/examiner');
+  getAllExamsForExaminer(examinerId: number) {
+    return this.http.get(this.url + '/examiner/' + examinerId);
   }
 
   getExamById(id: number) {

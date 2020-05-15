@@ -1,0 +1,7 @@
+textarea {
+  resize: none;
+}
+
+.alert {
+  padding: .4rem 1rem;
+}

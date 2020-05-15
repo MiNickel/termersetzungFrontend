@@ -3,10 +3,6 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {MainComponent} from './main/main.component';
-import {MainTaskListComponent} from './main/main-task-list/main-task-list.component';
-import {MainTaskComponent} from './main/main-task/main-task.component';
-import {MainService} from './main/main.service';
 import {MathjaxComponent} from './mathjax/mathjax.component';
 import {ConfigService} from './services/config.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -27,56 +23,65 @@ import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {ExerciseDetailsComponent} from './exercise/exercise-details/exercise-details.component';
 import {ExerciseListComponent} from './exercise/exercise-list/exercise-list.component';
 import {ExaminerComponent} from './examiner/examiner.component';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {OWL_DATE_TIME_LOCALE, OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ExaminerExamComponent} from './examiner/examiner-exam/examiner-exam.component';
 import {ExaminerExerciseComponent} from './examiner/examiner-exercise/examiner-exercise.component';
 import {ExaminerTasklistComponent} from './examiner/examiner-tasklist/examiner-tasklist.component';
+import { AuthService } from './services/auth.service';
+import { LoginComponent } from './login/login.component';
+import { SuccessModalComponent } from './modal/success-modal/success-modal.component';
+import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainComponent,
-    MainTaskListComponent,
-    MainTaskComponent,
-    MathjaxComponent,
-    HeaderComponent,
-    HelpComponent,
-    ExamComponent,
-    ExamListComponent,
-    ExerciseListComponent,
-    ExerciseComponent,
-    UploadComponent,
-    ErrorComponent,
-    CreateTasksComponent,
-    UploadListComponent,
-    GeneratePdfComponent,
-    ExerciseDetailsComponent,
-    ExaminerComponent,
-    ExaminerExamComponent,
-    ExaminerExerciseComponent,
-    ExaminerTasklistComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    NgbModalModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    BrowserAnimationsModule
-  ],
-  providers: [
-    MainService,
-    ConfigService,
-    ExamService,
-    ExerciseService
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+   declarations: [
+      AppComponent,
+      MathjaxComponent,
+      HeaderComponent,
+      HelpComponent,
+      ExamComponent,
+      ExamListComponent,
+      ExerciseListComponent,
+      ExerciseComponent,
+      UploadComponent,
+      ErrorComponent,
+      CreateTasksComponent,
+      UploadListComponent,
+      GeneratePdfComponent,
+      ExerciseDetailsComponent,
+      ExaminerComponent,
+      ExaminerExamComponent,
+      ExaminerExerciseComponent,
+      ExaminerTasklistComponent,
+      LoginComponent,
+      SuccessModalComponent,
+      ConfirmModalComponent
+   ],
+   imports: [
+      BrowserModule,
+      AppRoutingModule,
+      FormsModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      NgbModalModule,
+      OwlDateTimeModule,
+      OwlNativeDateTimeModule,
+      BrowserAnimationsModule
+   ],
+   providers: [
+      ConfigService,
+      ExamService,
+      ExerciseService,
+      AuthService,
+      {provide: OWL_DATE_TIME_LOCALE, useValue: 'de'},
+   ],
+   bootstrap: [
+      AppComponent
+   ],
+   entryComponents: [
+      SuccessModalComponent,
+      ConfirmModalComponent
+   ]
 })
 export class AppModule {
 }

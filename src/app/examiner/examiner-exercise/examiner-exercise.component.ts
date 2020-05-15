@@ -1,10 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ExaminerTasklistComponent} from '../examiner-tasklist/examiner-tasklist.component';
-import {Exam, Examiner, Exercise, Task} from '../../app.model';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {ExerciseService} from '../../services/exercise.service';
-import {TaskService} from '../../services/task.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ExaminerTasklistComponent } from '../examiner-tasklist/examiner-tasklist.component';
+import { Exam, Examiner, Exercise, Task } from '../../app.model';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { ExerciseService } from '../../services/exercise.service';
+import { TaskService } from '../../services/task.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from 'src/app/modal/confirm-modal/confirm-modal.component';
+import { SuccessModalComponent } from 'src/app/modal/success-modal/success-modal.component';
+import { CreateTasksComponent } from 'src/app/upload/create-tasks/create-tasks.component';
 
 @Component({
   selector: 'app-examiner-exercise',
@@ -14,15 +18,17 @@ import {TaskService} from '../../services/task.service';
 export class ExaminerExerciseComponent implements OnInit {
 
   public form: FormGroup;
-  public task: Task;
   public created = false;
 
 
-  @ViewChild(ExaminerTasklistComponent, {static: false})
+  @ViewChild(ExaminerTasklistComponent, { static: false })
   private taskList: ExaminerTasklistComponent;
 
+  @ViewChild(CreateTasksComponent, { static: false })
+  private createTasks: CreateTasksComponent;
+
   constructor(private route: ActivatedRoute, private exerciseService: ExerciseService,
-              private fb: FormBuilder, private taskService: TaskService) {
+              private fb: FormBuilder, private taskService: TaskService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -33,34 +39,38 @@ export class ExaminerExerciseComponent implements OnInit {
       this.taskList.taskList = exercise.tasks;
       console.log(this.taskList.taskList);
     });
-    this.taskService.currentTask.subscribe((task: any) => {
+    this.taskService.currentTaskExaminerExercise.subscribe((task: any) => {
       if (task !== '') {
-        this.task = task;
+        this.createTasks.task = task;
       }
     });
   }
 
   private createForm(exercise: Exercise) {
     this.form = this.fb.group({
-      id: [{value: exercise.id, disabled: true}, Validators.required],
+      id: [{ value: exercise.id, disabled: true }, Validators.required],
       name: [exercise.name, Validators.required],
-      examiner: new FormGroup({
-        firstname: new FormControl(exercise.examiner.firstname),
-        lastname: new FormControl(exercise.examiner.lastname)
-      }),
       category: [exercise.category, Validators.required]
     });
   }
 
   private formToModel() {
     const formValues = this.form.controls;
+    const examinerId: number = this.getExaminerId();
     return new Exercise(
       formValues.id.value,
       formValues.name.value,
-      new Examiner(-1, formValues.examiner.get('firstname').value, formValues.examiner.get('lastname').value),
+      examinerId,
       formValues.category.value,
       this.taskList.taskList
     );
+  }
+
+  private getExaminerId() {
+    const currentUser = localStorage.getItem('currentUser');
+    const jsonObject = JSON.parse(currentUser);
+    const examinerId: number = jsonObject.examinerId;
+    return examinerId;
   }
 
   public saveTask(task: Task) {
@@ -73,9 +83,22 @@ export class ExaminerExerciseComponent implements OnInit {
     }
   }
 
+  public deleteTask(taskId: number) {
+    const taskIndex = this.taskList.taskList.findIndex(t => t.id === taskId);
+    if (taskIndex) {
+      this.taskList.taskList = this.taskList.taskList.filter(task => task.id !== taskId);
+    }
+  }
+
   public upload() {
-    const exercise: Exercise = this.formToModel();
-    this.exerciseService.uploadExercise(exercise).subscribe(result => {
+    const me = this;
+    const modalRefConfirm = me.modalService.open(ConfirmModalComponent).result.then(confirmation => {
+      if (confirmation === 'yes') {
+        const exercise: Exercise = this.formToModel();
+        this.exerciseService.uploadExercise(exercise).subscribe(result => {
+          const modalRefSuccess = me.modalService.open(SuccessModalComponent);
+        });
+      }
     });
   }
 

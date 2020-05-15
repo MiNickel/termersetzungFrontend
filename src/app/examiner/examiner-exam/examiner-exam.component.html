@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-3">
-    <app-examiner-tasklist></app-examiner-tasklist>
+    <app-examiner-tasklist [type]="'exam'"></app-examiner-tasklist>
   </div>
   <div style="margin-right: 100px" class="col-md">
     <form *ngIf="created" [formGroup]="form">
@@ -9,24 +9,12 @@
           <label>Name</label>
           <input type="text" class="form-control" formControlName="name">
         </div>
-        <ng-container formGroupName="examiner">
-          <div class="col form-group">
-            <label>Vorname des Prüfers/der Prüferin</label>
-            <input type="text" class="form-control" formControlName="firstname">
-          </div>
-          <div class="col form-group">
-            <label>Nachname des Prüfers/der Prüferin</label>
-            <input type="text" class="form-control" formControlName="lastname">
-          </div>
-        </ng-container>
-      </div>
-      <div class="form-row">
         <div class="col form-group">
           <label>Code</label>
           <div class="input-group">
             <div class="input-group-prepend">
               <button (click)="changePasswordState()" class="input-group-text"><em *ngIf="showPassword"
-                                                                                   class="fa fa-eye"></em>
+                  class="fa fa-eye"></em>
                 <em *ngIf="!showPassword" class="fa fa-eye-slash"></em>
               </button>
             </div>
@@ -34,6 +22,8 @@
             <input *ngIf="!showPassword" type="password" class="form-control" formControlName="code">
           </div>
         </div>
+      </div>
+      <div class="form-row">
         <div class="col form-group">
           <label>Startdatum</label>
           <input class="form-control" formControlName="startDate" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1">
@@ -48,11 +38,9 @@
     </form>
     <hr>
     <div>
-      <app-create-tasks [task]="task" (emitTask)="saveTask($event)"></app-create-tasks>
+      <app-create-tasks (deselectTask)="deselectActiveTask($event)" (deleteTask)="deleteTask($event)" (emitTask)="saveTask($event)"></app-create-tasks>
     </div>
     <hr>
     <button (click)="upload()" type="button" class="btn btn-secondary">Klausur hochladen</button>
   </div>
 </div>
-
-

@@ -56,28 +56,51 @@
           <button type="button" class="btn btn-secondary" (click)="addStep()">Schritt
             hinzufügen
           </button>
+          <br>
           <div class="btn-group" role="group">
-            <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">$$\div$$</button>
-            <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">$$\cdot$$</button>
-            <button (click)="setSymbol('( )')" type="button" class="btn btn-secondary">$$( )$$</button>
-            <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">$$x^n$$</button>
-            <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">$$\sqrt x$$</button>
-            <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">$$\sin(x)$$</button>
-            <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">$$\cos(x)$$</button>
-            <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">$$ \vert \vert
-              $$
+            <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\div$$'"></app-mathjax>
             </button>
-            <button (click)="setSymbol('!')" type="button" class="btn btn-secondary">$$!$$</button>
-            <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">$$ \int$$</button>
-            <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">$$\sum$$</button>
-            <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">$$\coprod$$</button>
-            <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">$$\cup$$</button>
-            <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">$$\cap$$</button>
-            <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">$$F^\prime$$</button>
+            <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\cdot$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$x^n$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\sqrt x$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\sin(x)$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\cos(x)$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$ \\vert \\vert $$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$ \\int$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\sum$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\coprod$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\cup$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$\\cap$$'"></app-mathjax>
+            </button>
+            <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">
+              <app-mathjax [content]="'$$F^\\prime$$'"></app-mathjax>
+            </button>
             <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
-                    class="btn btn-secondary">$$(f^\prime)^\prime$$
+                    class="btn btn-secondary">
+              <app-mathjax [content]="'$$(f^\\prime)^\\prime$$'"></app-mathjax>
             </button>
-            <button (click)="setSymbol('det')" type="button" class="btn btn-secondary">$$det$$</button>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
@@ -90,7 +113,12 @@
     <label>Beschreibung</label>
     <textarea class="form-control" rows="4" formControlName="description"></textarea>
   </div>
-  <button (click)="saveTask()" type="button" class="btn btn-secondary">Aufgabe
+  <button style="margin-right: 5px;" (click)="saveTask()" type="button" class="btn btn-secondary">Aufgabe
     speichern
+  </button>
+  <button style="margin-right: 5px;" *ngIf="taskIsRemovable" (click)="removeTask()" type="button" class="btn btn-secondary">Aufgabe
+    löschen
+  </button>
+  <button (click)="refreshForm()" type="button" class="btn btn-secondary">Formular leeren
   </button>
 </form>

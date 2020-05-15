@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Exam, Task, TaskDto} from 'src/app/app.model';
-import {MainService} from 'src/app/main/main.service';
+import {Exam, Task} from 'src/app/app.model';
 import {ExamService} from '../../services/exam.service';
 
 @Component({
@@ -11,8 +10,8 @@ import {ExamService} from '../../services/exam.service';
 export class ExamListComponent implements OnInit {
 
   @Input()
-  public taskList: TaskDto[];
-  public activeTask = new TaskDto(-1, '', '', '', 0, 0, 0);
+  public taskList: Task[];
+  public activeTask = new Task(-1, '', '', [], 0, 0, 0, 0, 0);
   public taskStateMap: Map<string, string> = new Map();
 
   constructor(private examService: ExamService) {
@@ -24,7 +23,7 @@ export class ExamListComponent implements OnInit {
     });
   }
 
-  selectTask(task: TaskDto) {
+  selectTask(task: Task) {
     this.activeTask = task;
     this.examService.changeTask(task);
   }

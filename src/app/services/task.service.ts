@@ -5,15 +5,32 @@ import {Task} from '../app.model';
 @Injectable({providedIn: 'root'})
 export class TaskService {
 
-  public task = new BehaviorSubject<any>('');
+  public taskUploadComponent = new BehaviorSubject<any>('');
 
-  public currentTask = this.task.asObservable();
+  public currentTaskUpload = this.taskUploadComponent.asObservable();
+
+  public taskExaminerExerciseComponent = new BehaviorSubject<any>('');
+
+  public currentTaskExaminerExercise = this.taskExaminerExerciseComponent.asObservable();
+
+  public taskExaminerExamComponent = new BehaviorSubject<any>('');
+
+  public currentTaskExaminerExam = this.taskExaminerExamComponent.asObservable();
 
   constructor() {
   }
 
-  changeTask(task: Task) {
-    this.task.next(task);
+  changeTaskUpload(task: Task) {
+    console.log('asd');
+    this.taskUploadComponent.next(task);
+  }
+
+  changeTaskExaminerExercise(task: Task) {
+    this.taskExaminerExerciseComponent.next(task);
+  }
+
+  changeTaskExaminerExam(task: Task) {
+    this.taskExaminerExamComponent.next(task);
   }
 
 }

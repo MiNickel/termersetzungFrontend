@@ -1,29 +1,36 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Termersetzungssystem</a>
+  <span class="navbar-brand">Termersetzungssystem</span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/exam">Klausur</a>
+      <li class="nav-item" *ngIf="isLoggedIn$ && type === 'students'">
+        <a class="nav-link" routerLink="/exam" [routerLinkActive]="['active-link']">Klausur</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/exercise">Übungen</a>
+      <li class="nav-item" *ngIf="isLoggedIn$ && type === 'students'">
+        <a class="nav-link" routerLink="/exercise" [routerLinkActive]="['active-link']">Übungen</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/upload">Hochladen</a>
+      <li class="nav-item" *ngIf="isLoggedIn$ && type === 'professors'">
+        <a class="nav-link" routerLink="/upload" [routerLinkActive]="['active-link']">Hochladen</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/help">Hilfe</a>
+      <li class="nav-item" *ngIf="isLoggedIn$">
+        <a class="nav-link" routerLink="/help" [routerLinkActive]="['active-link']">Hilfe</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/pdf">PDF generieren</a>
+      <li class="nav-item" *ngIf="isLoggedIn$">
+        <a class="nav-link" routerLink="/pdf" [routerLinkActive]="['active-link']">PDF generieren</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/examiner">Übersicht für Prüfende</a>
+      <li class="nav-item" *ngIf="isLoggedIn$ && type === 'professors'">
+        <a class="nav-link" routerLink="/examiner" [routerLinkActive]="['active-link']">Übersicht für Prüfende</a>
       </li>
+      <li class="nav-item" *ngIf="isLoggedIn$">
+        <a class="nav-link" routerLink="/" (click)="onLogout()">Logout</a>
+    </li>
+    <li class="nav-item" *ngIf="isLoggedIn$ === false">
+        <a class="nav-link" routerLink="/login">Login</a>
+    </li>
     </ul>
+    <span class="navbar-brand">{{username}}</span>
   </div>
 </nav>
