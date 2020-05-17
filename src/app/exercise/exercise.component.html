@@ -1,4 +1,4 @@
-<div *ngIf="exercises && studentExercises" class="container">
+<div *ngIf="exercises && studentExercises && studentExerciseNameMap" class="container">
   <div class="row">
     <div class="col-sm" style="text-align: center;">
       <h5>Offene Übungen</h5>
@@ -16,8 +16,8 @@
     </div>
     <div class="col-sm">
       <ul class="list-group">
-        <li (click)="openExercise(studentExercise.id)" *ngFor="let studentExercise of studentExercises" class="list-group-item">
-          {{studentExercise.name}}</li>
+        <li (click)="openExercise(studentExercise.exerciseId)" *ngFor="let studentExercise of studentExercises" class="list-group-item">
+          {{studentExerciseNameMap.get(studentExercise.exerciseId)}}</li>
       </ul>
     </div>
   </div>

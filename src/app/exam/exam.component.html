@@ -1,4 +1,4 @@
-<div *ngIf="exam === undefined" class="d-flex justify-content-center">
+<div (keyup.enter)="getExam()" *ngIf="exam === undefined" class="d-flex justify-content-center">
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">Klausurencode</h5>
@@ -20,47 +20,46 @@
     <div class="form-row">
       <div *ngIf="taskObject.steps[0].step !== ''" class="btn-group col-md-7" role="group">
         <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\div$$'"></app-mathjax>
+          <div [mathjax]="'\\div'">\( {{ '{\\div}' }} \)</div>
         </button>
         <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\cdot$$'"></app-mathjax>
+          <div [mathjax]="'\\cdot'">\( {{ '{\\cdot}' }} \)</div>
         </button>
         <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$x^n$$'"></app-mathjax>
+          <div [mathjax]="'x^n'">\( {{ '{x^n}' }} \)</div>
         </button>
         <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\sqrt x$$'"></app-mathjax>
+          <div [mathjax]="'\\sqrt x'">\( {{ '\\sqrt x' }} \)</div>
         </button>
         <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\sin(x)$$'"></app-mathjax>
+          <div [mathjax]="'\\sin(x)'">\( {{ '\\sin(x)' }} \)</div>
         </button>
         <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\cos(x)$$'"></app-mathjax>
+          <div [mathjax]="'\\cos(x)'">\( {{ '\\cos(x)' }} \)</div>
         </button>
         <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$ \\vert \\vert $$'"></app-mathjax>
+          <div [mathjax]="'\\vert \\vert'">\( {{ '\\vert \\vert' }} \)</div>
         </button>
         <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$ \\int$$'"></app-mathjax>
+          <div [mathjax]="'\\int'">\( {{ '\\int' }} \)</div>
         </button>
         <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\sum$$'"></app-mathjax>
+          <div [mathjax]="'\\sum'">\( {{ '\\sum' }} \)</div>
         </button>
         <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\coprod$$'"></app-mathjax>
+          <div [mathjax]="'\\coprod'">\( {{ '\\coprod' }} \)</div>
         </button>
         <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\cup$$'"></app-mathjax>
+          <div [mathjax]="'\\cup'">\( {{ '\\cup' }} \)</div>
         </button>
         <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$\\cap$$'"></app-mathjax>
+          <div [mathjax]="'\\cap'">\( {{ '\\cap' }} \)</div>
         </button>
         <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">
-          <app-mathjax [content]="'$$F^\\prime$$'"></app-mathjax>
+          <div [mathjax]="'F^\\prime'">\( {{ 'F^\\prime' }} \)</div>
         </button>
-        <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
-                class="btn btn-secondary">
-          <app-mathjax [content]="'$$(f^\\prime)^\\prime$$'"></app-mathjax>
+        <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button" class="btn btn-secondary">
+          <div [mathjax]="'(f^\\prime)^\\prime'">\( {{ '(f^\\prime)^\\prime' }} \)</div>
         </button>
       </div>
       <div class="col-md-5">
@@ -76,27 +75,27 @@
 
     <ng-container *ngFor="let step of steps; let i = index;">
       <div class="form-group row" style="margin-bottom: 5px;">
-        <app-mathjax *ngIf="taskObject.steps[0].step !== undefined" class="col col-form-label" [content]="step">
-        </app-mathjax>
+        <div *ngIf="taskObject.steps[0].step !== undefined" class="col col-form-label" [mathjax]="step">\(
+          {{ '{' + step + '}' }} \)</div>
         <div class="col">
           <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.steps[0].step !== undefined"
-                 type="text" class="form-control" [(ngModel)]="operations[i]"/>
+            type="text" class="form-control" [(ngModel)]="operations[i]" />
         </div>
         <button (click)="editStep(i)" *ngIf="i !== 0" type="button" class="btn btn-light">Edit</button>
       </div>
       <div *ngIf="editStepBool[i]" class="form-group row">
         <input placeholder="Term bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step" type="text"
-               class="form-control col">
+          class="form-control col">
       </div>
     </ng-container>
     <div class="form-group row">
       <div class="col">
         <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text"
-               class="form-control">
+          class="form-control">
       </div>
     </div>
     <div class="form-group row">
-      <app-mathjax *ngIf="newTerm !==''" class="col" [content]="'$' + newTerm + '$'"></app-mathjax>
+      <div *ngIf="newTerm !==''" class="col" [mathjax]="newTerm">\( {{ '{' + newTerm + '}' }} \)</div>
     </div>
     <div class="form-group row">
       <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt
@@ -119,7 +118,7 @@
         <div class="form-check-inline">
           <label class="form-check-label">
             <input type="radio" class="form-check-input" formControlName="taskState"
-                   value="zurückgestellt">zurückgestellt
+              value="zurückgestellt">zurückgestellt
           </label>
         </div>
         <div class="form-check-inline">

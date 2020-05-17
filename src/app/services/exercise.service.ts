@@ -19,7 +19,7 @@ export class ExerciseService {
     constructor(private http: HttpClient) { }
 
     changeTaskState(key: string, value: string) {
-        this.taskState.next({key, value});
+        this.taskState.next({ key, value });
     }
 
     changeTask(task: Task) {
@@ -31,7 +31,7 @@ export class ExerciseService {
     }
 
     getAllExercisesForStudent(studentId: number) {
-        return this.http.get<Exercise[]>(this.url + '/student/' + studentId);
+        return this.http.get<StudentExercise[]>(this.url + '/student/' + studentId);
     }
 
     getAllExercises() {
@@ -52,9 +52,15 @@ export class ExerciseService {
         );
     }
 
+    uploadStudentExercise(studentExercise: StudentExercise) {
+        return this.http.post<StudentExercise>(this.url + '/studentexercise',
+            studentExercise
+        );
+    }
+
     checkTask(checkStepList: CheckStep[]) {
         return this.http.post<CheckStep[]>(this.url + '/check',
-        checkStepList
+            checkStepList
         );
     }
 }

@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {MathjaxComponent} from './mathjax/mathjax.component';
+// import {MathjaxComponent} from './mathjax/mathjax.component';
 import {ConfigService} from './services/config.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -32,11 +32,12 @@ import { AuthService } from './services/auth.service';
 import { LoginComponent } from './login/login.component';
 import { SuccessModalComponent } from './modal/success-modal/success-modal.component';
 import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
+import { MathJaxModule } from 'ngx-mathjax';
 
 @NgModule({
    declarations: [
       AppComponent,
-      MathjaxComponent,
+      // MathjaxComponent,
       HeaderComponent,
       HelpComponent,
       ExamComponent,
@@ -66,7 +67,12 @@ import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.compo
       NgbModalModule,
       OwlDateTimeModule,
       OwlNativeDateTimeModule,
-      BrowserAnimationsModule
+      BrowserAnimationsModule,
+      MathJaxModule.forRoot({
+         version: '2.7.5',
+         config: 'TeX-AMS_HTML',
+         hostname: 'cdnjs.cloudflare.com'
+      })
    ],
    providers: [
       ConfigService,

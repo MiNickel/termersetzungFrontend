@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ExerciseService } from '../services/exercise.service';
-import { Exercise } from '../app.model';
+import { Exercise, StudentExercise } from '../app.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
 })
 export class ExerciseComponent implements OnInit {
 
-  public studentExercises: Exercise[];
+  public studentExercises: StudentExercise[];
   public exercises: Exercise[];
+  public studentExerciseNameMap = new Map<number, string>();
 
   constructor(private exerciseService: ExerciseService, private router: Router) { }
 
@@ -20,17 +21,19 @@ export class ExerciseComponent implements OnInit {
     const jsonObject = JSON.parse(currentUser);
     const studentId: number = jsonObject.studentId;
 
-    this.exerciseService.getAllExercisesForStudent(studentId).subscribe((exercises: Exercise[]) => {
-      this.studentExercises = exercises;
-    });
-    this.exerciseService.getAllExercises().subscribe((exercises: Exercise[]) => {
-      console.log(exercises);
-      this.exercises = exercises;
-    });
-  }
+    this.exerciseService.getAllExercisesForStudent(studentId).subscribe((studentExercises: StudentExercise[]) => {
+      this.studentExercises = studentExercises;
+      this.exerciseService.getAllExercises().subscribe((exercises: Exercise[]) => {
+        for (const studentExercise of studentExercises) {
+          this.studentExerciseNameMap.set(studentExercise.exerciseId,
+            exercises.find(exercise => exercise.id === studentExercise.exerciseId).name);
+          const index = exercises.findIndex(e => e.id === studentExercise.exerciseId);
+          exercises.splice(index, 1);
+        }
+        this.exercises = exercises;
+      });
 
-  public array(n: number): any[] {
-    return Array(n);
+    });
   }
 
   public openExercise(exerciseId: number) {

@@ -16,12 +16,13 @@
   <div class="form-group">
     <label>Schritte</label>
     <div>
-      <button style="margin-right: 1rem" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#stepsModal">Schritte
+      <button style="margin-right: 1rem" type="button" class="btn btn-secondary" data-toggle="modal"
+        data-target="#stepsModal">Schritte
         hinzufügen
       </button>
     </div>
     <div formArrayName="steps" class="modal fade" id="stepsModal" tabindex="-1" role="dialog"
-         aria-labelledby="stepsModalLabel" aria-hidden="true">
+      aria-labelledby="stepsModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -36,8 +37,8 @@
                 <div class="form-group col-md-8">
                   <label>Term</label>
                   <input (focus)="onFocus($event)" class="form-control" formControlName="step" type="text">
-                  <app-mathjax *ngIf="checkValue(step.get('step').value)"
-                               [content]="'$' + step.get('step').value + '$'"></app-mathjax>
+                  <div *ngIf="checkValue(step.get('step').value)" [mathjax]="step.get('step').value">\(
+                    {{ '{' + step.get('step').value + '}' }} \)</div>
                 </div>
                 <div class="form-group col-md-3">
                   <label>Umformung</label>
@@ -49,7 +50,7 @@
                 </div>
               </div>
               <button *ngIf="steps.length > 1" type="button" class="btn btn-secondary btn-sm"
-                      (click)="removeStep(i)">Schritt löschen
+                (click)="removeStep(i)">Schritt löschen
               </button>
             </ng-container>
           </div>
@@ -59,47 +60,46 @@
           <br>
           <div class="btn-group" role="group">
             <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\div$$'"></app-mathjax>
+              <div [mathjax]="'\\div'">\( {{ '{\\div}' }} \)</div>
             </button>
             <button (click)="setSymbol('\\cdot')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\cdot$$'"></app-mathjax>
+              <div [mathjax]="'\\cdot'">\( {{ '{\\cdot}' }} \)</div>
             </button>
             <button (click)="setSymbol('x^n')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$x^n$$'"></app-mathjax>
+              <div [mathjax]="'x^n'">\( {{ '{x^n}' }} \)</div>
             </button>
             <button (click)="setSymbol('\\sqrt x')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\sqrt x$$'"></app-mathjax>
+              <div [mathjax]="'\\sqrt x'">\( {{ '\\sqrt x' }} \)</div>
             </button>
             <button (click)="setSymbol('\\sin(x)')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\sin(x)$$'"></app-mathjax>
+              <div [mathjax]="'\\sin(x)'">\( {{ '\\sin(x)' }} \)</div>
             </button>
             <button (click)="setSymbol('\\cos(x)')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\cos(x)$$'"></app-mathjax>
+              <div [mathjax]="'\\cos(x)'">\( {{ '\\cos(x)' }} \)</div>
             </button>
             <button (click)="setSymbol('\\vert  \\vert')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$ \\vert \\vert $$'"></app-mathjax>
+              <div [mathjax]="'\\vert \\vert'">\( {{ '\\vert \\vert' }} \)</div>
             </button>
             <button (click)="setSymbol('\\int')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$ \\int$$'"></app-mathjax>
+              <div [mathjax]="'\\int'">\( {{ '\\int' }} \)</div>
             </button>
             <button (click)="setSymbol('\\sum')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\sum$$'"></app-mathjax>
+              <div [mathjax]="'\\sum'">\( {{ '\\sum' }} \)</div>
             </button>
             <button (click)="setSymbol('\\coprod')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\coprod$$'"></app-mathjax>
+              <div [mathjax]="'\\coprod'">\( {{ '\\coprod' }} \)</div>
             </button>
             <button (click)="setSymbol('\\cup')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\cup$$'"></app-mathjax>
+              <div [mathjax]="'\\cup'">\( {{ '\\cup' }} \)</div>
             </button>
             <button (click)="setSymbol('\\cap')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$\\cap$$'"></app-mathjax>
+              <div [mathjax]="'\\cap'">\( {{ '\\cap' }} \)</div>
             </button>
             <button (click)="setSymbol('f^\\prime')" type="button" class="btn btn-secondary">
-              <app-mathjax [content]="'$$F^\\prime$$'"></app-mathjax>
+              <div [mathjax]="'F^\\prime'">\( {{ 'F^\\prime' }} \)</div>
             </button>
-            <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button"
-                    class="btn btn-secondary">
-              <app-mathjax [content]="'$$(f^\\prime)^\\prime$$'"></app-mathjax>
+            <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button" class="btn btn-secondary">
+              <div [mathjax]="'(f^\\prime)^\\prime'">\( {{ '(f^\\prime)^\\prime' }} \)</div>
             </button>
           </div>
           <div class="modal-footer">
@@ -116,7 +116,8 @@
   <button style="margin-right: 5px;" (click)="saveTask()" type="button" class="btn btn-secondary">Aufgabe
     speichern
   </button>
-  <button style="margin-right: 5px;" *ngIf="taskIsRemovable" (click)="removeTask()" type="button" class="btn btn-secondary">Aufgabe
+  <button style="margin-right: 5px;" *ngIf="taskIsRemovable" (click)="removeTask()" type="button"
+    class="btn btn-secondary">Aufgabe
     löschen
   </button>
   <button (click)="refreshForm()" type="button" class="btn btn-secondary">Formular leeren
