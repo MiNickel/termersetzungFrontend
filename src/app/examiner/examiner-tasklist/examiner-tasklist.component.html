@@ -1,6 +1,6 @@
-<li *ngIf="taskList.length !== 0" class="list-group">
+<ol *ngIf="taskList.length !== 0" class="list-group">
   <p style="text-align: center">Aufgaben</p>
-  <ol *ngFor="let task of taskList">
+  <ul *ngFor="let task of taskList">
     <li
       class="list-group-item" [ngClass]="{'list-group-item-secondary': task.name === activeTask.name}"
       (click)="selectTask(task)">
@@ -8,8 +8,8 @@
       <span *ngIf="task.score !== 1">{{' - ' + task.score + ' Punkte'}}</span>
       <span *ngIf="task.score === 1">{{' - ' + task.score + ' Punkt'}}</span>
     </li>
-  </ol>
-</li>
+  </ul>
+</ol>
 <div *ngIf="taskList.length === 0">
   Bisher sind noch keine Aufgaben vorhanden
 </div>

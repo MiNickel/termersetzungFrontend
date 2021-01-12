@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Exercise, Task, CheckStep, Exam, StudentExercise } from '../app.model';
 import { BehaviorSubject } from 'rxjs';
+import { setHeaders } from '../shared/header';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseService {
@@ -27,40 +28,48 @@ export class ExerciseService {
     }
 
     getAllExercisesForExaminer(examinerId: number) {
-        return this.http.get<Exercise[]>(this.url + '/examiner/' + examinerId);
-    }
-
-    getAllExercisesForStudent(studentId: number) {
-        return this.http.get<StudentExercise[]>(this.url + '/student/' + studentId);
+        return this.http.get<Exercise[]>(this.url + '/examiner/' + examinerId,
+            {
+                headers: setHeaders()
+            });
     }
 
     getAllExercises() {
-        return this.http.get<Exercise[]>(this.url + '/student');
+        return this.http.get<Exercise[]>(this.url + '/student',
+            {
+                headers: setHeaders()
+            });
     }
 
-    getExerciseById(id: number) {
-        return this.http.get<Exercise>(this.url + '/' + id);
+    getExerciseByIdForExaminer(id: number) {
+        return this.http.get<Exercise>(this.url + '/' + id,
+            {
+                headers: setHeaders()
+            });
     }
 
-    getStudentExerciseByExerciseIdAndStudentId(exerciseId: number, studentId: number) {
-        return this.http.get<StudentExercise>(this.url + '/' + exerciseId + '/' + studentId);
+    getExerciseByIdForStudent(id: number) {
+        return this.http.get<Exercise>(this.url + '/student/' + id,
+            {
+                headers: setHeaders()
+            });
     }
 
     uploadExercise(exercise: Exercise) {
         return this.http.post<Exercise>(this.url,
-            exercise
-        );
-    }
-
-    uploadStudentExercise(studentExercise: StudentExercise) {
-        return this.http.post<StudentExercise>(this.url + '/studentexercise',
-            studentExercise
+            exercise,
+            {
+                headers: setHeaders()
+            }
         );
     }
 
     checkTask(checkStepList: CheckStep[]) {
         return this.http.post<CheckStep[]>(this.url + '/check',
-            checkStepList
+            checkStepList,
+            {
+                headers: setHeaders()
+            }
         );
     }
 }

@@ -53,7 +53,6 @@ export class ExaminerExamComponent implements OnInit {
       startDate: [new Date(exam.startDate), Validators.required],
       endDate: [new Date(exam.endDate), Validators.required]
     });
-    console.log(this.form);
   }
 
   private formToModel() {
@@ -83,7 +82,10 @@ export class ExaminerExamComponent implements OnInit {
 
   upload() {
     const me = this;
-    const modalRefConfirm = me.modalService.open(ConfirmModalComponent).result.then(confirmation => {
+    const modalRefConfirm = me.modalService.open(ConfirmModalComponent);
+    modalRefConfirm.componentInstance.text = 'Wollen Sie die Klausur wirklich hochladen?';
+
+    modalRefConfirm.result.then(confirmation => {
       if (confirmation === 'yes') {
         const exam: Exam = this.formToModel();
         this.examService.uploadExam(exam).subscribe(result => {

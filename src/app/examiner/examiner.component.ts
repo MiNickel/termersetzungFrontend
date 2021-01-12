@@ -13,6 +13,7 @@ import { Route, Router } from '@angular/router';
 export class ExaminerComponent implements OnInit {
 
   public exams: Exam[] = [];
+  public finishedExams: Exam[] = [];
   public exercises: Exercise[] = [];
 
   constructor(private examService: ExamService, private fb: FormBuilder, private exerciseService: ExerciseService, private router: Router) {
@@ -23,7 +24,12 @@ export class ExaminerComponent implements OnInit {
     const jsonObject = JSON.parse(currentUser);
     const examinerId: number = jsonObject.examinerId;
     this.examService.getAllExamsForExaminer(examinerId).subscribe((exams: Exam[]) => {
-      this.exams = exams;
+      if (exams.length > 0) {
+        const dateNow: Date = new Date();
+        this.exams = exams.filter(exam => new Date(exam.startDate).getTime() > dateNow.getTime());
+        this.finishedExams = exams.filter(exam => new Date(exam.endDate).getTime() < dateNow.getTime());
+        const examDate: Date = new Date(exams[0].endDate);
+      }
     });
     this.exerciseService.getAllExercisesForExaminer(examinerId).subscribe((exercises: Exercise[]) => {
       this.exercises = exercises;
@@ -31,12 +37,14 @@ export class ExaminerComponent implements OnInit {
   }
 
   goToExam(id: number) {
-    this.router.navigate(['/examiner/exam/', id]).then(r => {
-    });
+    this.router.navigate(['/examiner/exam/', id]);
   }
 
   goToExercise(id: number) {
-    this.router.navigate(['/examiner/exercise/', id]).then(r => {
-    });
+    this.router.navigate(['/examiner/exercise/', id]);
+  }
+
+  goToFinishedExam(id: number) {
+    this.router.navigate(['/examiner/studentexam/', id]);
   }
 }

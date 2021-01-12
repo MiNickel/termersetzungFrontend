@@ -1,0 +1,26 @@
+<div *ngIf="studentExams !== undefined && students !== undefined" class="container">
+    <div class="row">
+        <div class="col-sm" style="text-align: center;">
+            <h5>Klausur: {{examName}}</h5>
+          </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <ul class="list-group">
+              <li (click)="openStudentExam(studentExam.id)" *ngFor="let studentExam of studentExams; let i = index" class="list-group-item">
+                {{getStudentName(studentExam.studentId)}}</li>
+            </ul>
+          </div>
+    </div>
+</div>
+
+<!--<button (click)="download()">Test</button>
+<div id="test" mathjax>\( y = 2 \)</div>
+<div class="row">
+    <div class="col-sm">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between"><p class="p-0 m-0 flex-grow-1">asd</p><button class="btn btn-secondary">asd</button>
+            </li>
+        </ul>
+      </div>
+</div>-->

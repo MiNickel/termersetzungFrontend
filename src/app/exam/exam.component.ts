@@ -1,46 +1,47 @@
-import {Component, OnInit} from '@angular/core';
-import {ExamService} from '../services/exam.service';
-import {Exam, Step, Task, StudentExam} from '../app.model';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ExamService } from '../services/exam.service';
+import { Exam, Step, Task, StudentExam } from '../app.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ExamListComponent } from './exam-list/exam-list.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../modal/confirm-modal/confirm-modal.component';
+import { StudentExamService } from '../services/student.exam.service';
+import { SuccessModalComponent } from '../modal/success-modal/success-modal.component';
 
 @Component({
   selector: 'app-exam',
   templateUrl: './exam.component.html',
-  styleUrls: ['./exam.component.css']
+  styleUrls: ['./exam.component.scss']
 })
 export class ExamComponent implements OnInit {
 
   public code = '';
-  public exam: Exam;
+  public exam: StudentExam;
   public activeInputElement: any;
   public error: string;
-  public steps: string[] = [];
   public newTerm = '';
-  public operations: string[] = [];
-  public taskObject: Task;
+  public task: Task;
   public editStepBool: boolean[] = [false];
   public form: FormGroup;
 
-  constructor(private examService: ExamService, private fb: FormBuilder) {
+  @ViewChild(ExamListComponent, { static: false })
+  public examList: ExamListComponent;
+
+  constructor(private examService: ExamService, private fb: FormBuilder,
+    // tslint:disable-next-line: align
+    private modalService: NgbModal, private studentExamService: StudentExamService, private router: Router) {
   }
 
   ngOnInit() {
-    this.examService.currentTask.subscribe((task) => {
-      if (this.taskObject !== undefined) {
+    this.examService.currentTask.subscribe((task: any) => {
+      if (this.task !== undefined) {
         this.saveCurrentTask();
       }
       if (task !== '') {
-        this.taskObject = task;
-        let taskFromLocalStorage: any = localStorage.getItem(task.name);
-        if (taskFromLocalStorage === null) {
-          this.steps = [];
-          this.operations = [];
-          this.steps[0] = '$' + this.taskObject.steps[0].step + '$';
-        } else {
-          taskFromLocalStorage = JSON.parse(taskFromLocalStorage);
-          this.steps = taskFromLocalStorage.steps;
-          this.operations = taskFromLocalStorage.operations;
-        }
+        this.newTerm = '';
+        this.task = task;
+        this.getTaskState();
       }
     });
     this.createForm();
@@ -48,9 +49,15 @@ export class ExamComponent implements OnInit {
   }
 
   getExam() {
+    const me = this;
     this.error = undefined;
-    this.examService.getExamForStudent(this.code).subscribe(exam => {
+    const studentId = me.getStudentId();
+    const studentFullname = me.getStudentName();
+    const firstname = studentFullname.split(' ')[0];
+    const lastname = studentFullname.split(' ')[1];
+    this.studentExamService.getExamForStudent(this.code, studentId, firstname, lastname).subscribe(exam => {
       this.exam = exam;
+      me.examList.taskList = exam.tasks;
     }, e => {
       this.error = e.error.message;
     });
@@ -64,17 +71,17 @@ export class ExamComponent implements OnInit {
 
   onFormChange() {
     this.form.get('taskState').valueChanges.subscribe(val => {
-      this.examService.changeTaskState(this.taskObject.name, val);
+      this.examService.changeTaskState(this.task.name, val);
     });
   }
 
+  getTaskState() {
+    this.form.controls.taskState.setValue(this.examList.taskStateMap.get(this.task.name));
+  }
+
   saveCurrentTask() {
-    const taskData = {
-      task: this.taskObject.steps[0].step,
-      steps: this.steps,
-      operations: this.operations
-    };
-    localStorage.setItem(this.taskObject.steps[0].step, JSON.stringify(taskData));
+    const index: number = this.examList.taskList.findIndex(task => task.name === this.task.name);
+    this.examList.taskList[index] = this.task;
   }
 
   onFocus(event: any) {
@@ -82,41 +89,69 @@ export class ExamComponent implements OnInit {
   }
 
   setSymbol(symbol: string) {
-    this.activeInputElement.value = symbol;
+    this.activeInputElement.value += symbol;
   }
 
   editStep(index: number) {
     this.editStepBool[index] = this.editStepBool[index] !== true;
   }
 
+  removeStep(index: number) {
+    this.task.steps.splice(index, 1);
+  }
+
   nextStep() {
-    this.steps.push('$' + this.newTerm + '$');
+    this.task.steps.push(new Step(-1, this.newTerm, 0, ''));
     this.newTerm = '';
     this.editStepBool.push(false);
   }
 
-  finished() {
-    this.saveCurrentTask();
-    const tasks: Task[] = this.exam.tasks;
-    const studentExam = new StudentExam(-1, [], this.exam.id, 0);
-    for (const task of tasks) {
-      let taskFromLocalStorage: any = localStorage.getItem(task.steps[0].step);
-      taskFromLocalStorage = JSON.parse(taskFromLocalStorage);
-      const steps = taskFromLocalStorage.steps;
-      const operations = taskFromLocalStorage.operations;
-      const taskSteps: Step[] = [];
-      for (let i = 0; i < steps.length - 1; i++) {
-        const step: Step = new Step(-1, steps[i].replace(/\$/g, ''), null, operations[i]);
-        taskSteps.push(step);
-      }
-      const lastStep: Step = new Step(-1, steps[steps.length - 1].replace(/\$/g, ''), null, null);
-      taskSteps.push(lastStep);
-      const examTask = new Task(task.id, task.name, task.description, taskSteps, task.score, 0, 0, 0, 0);
-      studentExam.tasks.push(examTask);
-    }
-    this.examService.correctStudentExam(studentExam).subscribe(result => {
+  save() {
+    const modalRefConfirm = this.modalService.open(ConfirmModalComponent);
+    modalRefConfirm.componentInstance.text = 'Wollen Sie die Klausur wirklich hochladen?';
 
+    modalRefConfirm.result.then(confirmation => {
+      if (confirmation === 'yes') {
+        this.saveCurrentTask();
+        this.exam.tasks = this.examList.taskList;
+        this.exam.studentId = this.getStudentId();
+        this.studentExamService.correctStudentExam(this.exam).subscribe(result => {
+          this.exam = undefined;
+          this.task = undefined;
+          this.code = '';
+          this.examList.taskList = [];
+          const modalRefSuccess = this.modalService.open(SuccessModalComponent);
+        });
+      }
     });
   }
 
+  private getStudentId(): number {
+    const currentUser = localStorage.getItem('currentUser');
+    const jsonObject = JSON.parse(currentUser);
+    const studentId: number = jsonObject.studentId;
+    return studentId;
+  }
+
+  private getStudentName() {
+    const currentUser = localStorage.getItem('currentUser');
+    const jsonObject = JSON.parse(currentUser);
+    const studentName: string = jsonObject.fullname;
+
+    return studentName;
+  }
+
+  confirmExit() {
+    const me = this;
+    const modalRefConfirm = me.modalService.open(ConfirmModalComponent);
+    modalRefConfirm.componentInstance.text = 'Wollen Sie die Seite wirklich verlassen?';
+
+    modalRefConfirm.result.then(confirmation => {
+      if (confirmation === 'yes') {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
 }

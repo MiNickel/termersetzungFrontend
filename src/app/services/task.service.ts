@@ -21,7 +21,6 @@ export class TaskService {
   }
 
   changeTaskUpload(task: Task) {
-    console.log('asd');
     this.taskUploadComponent.next(task);
   }
 

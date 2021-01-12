@@ -31,28 +31,36 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body" *ngFor="let step of steps.controls; let i=index">
-            <ng-container [formGroupName]="i">
-              <div class="form-row">
-                <div class="form-group col-md-8">
-                  <label>Term</label>
-                  <input (focus)="onFocus($event)" class="form-control" formControlName="step" type="text">
-                  <div *ngIf="checkValue(step.get('step').value)" [mathjax]="step.get('step').value">\(
-                    {{ '{' + step.get('step').value + '}' }} \)</div>
+          <div class="modal-body">
+            <div class="form-row">
+              <label class="form-group col-md-8">Term</label>
+              <label class="form-group col-md-3">Umformung</label>
+              <label class="form-group col-md-1">Punkte</label>
+            </div>
+            <div *ngFor="let step of steps.controls; let i=index">
+              <ng-container [formGroupName]="i">
+                <div class="form-row">
+                  <div class="form-group col-md-8">
+                    <input (focus)="onFocus($event)" class="form-control" formControlName="step" type="text">
+                    <div *ngIf="checkValue(step.get('step').value)" [mathjax]="[step.get('step').value]">\(
+                      {{ '{}' }} \)</div>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <input (focus)="onFocus($event)" class="form-control" formControlName="conversion" type="text">
+                    <div *ngIf="checkValue(step.get('conversion').value)" [mathjax]="[step.get('conversion').value]">\(
+                      {{ '{}' }} \)</div>
+                  </div>
+                  <div class="form-group col-md-1">
+                    <ng-container *ngIf="i > 0">
+                      <input class="form-control" formControlName="score" type="text">
+                    </ng-container>
+                  </div>
                 </div>
-                <div class="form-group col-md-3">
-                  <label>Umformung</label>
-                  <input (focus)="onFocus($event)" class="form-control" formControlName="conversion" type="text">
-                </div>
-                <div class="form-group col-md-1">
-                  <label>Punkte</label>
-                  <input class="form-control" formControlName="score" type="text">
-                </div>
-              </div>
-              <button *ngIf="steps.length > 1" type="button" class="btn btn-secondary btn-sm"
-                (click)="removeStep(i)">Schritt löschen
-              </button>
-            </ng-container>
+                <button style="margin-bottom: 10px; margin-top: 0px;" *ngIf="steps.length > 1" type="button" class="btn btn-secondary btn-sm"
+                  (click)="removeStep(i)">Schritt löschen
+                </button>
+              </ng-container>
+            </div>
           </div>
           <button type="button" class="btn btn-secondary" (click)="addStep()">Schritt
             hinzufügen

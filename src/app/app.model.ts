@@ -59,6 +59,7 @@ export class Task {
         public id: number,
         public name: string,
         public description: string,
+        public notes: string,
         public steps: Step[],
         public score: number,
         public examId: number,

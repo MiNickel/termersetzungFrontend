@@ -24,7 +24,6 @@ export class CreateTasksComponent implements OnInit {
   @Input()
   public set task(task: Task) {
     this.createForm();
-    console.log('tas');
     this.onTask(task);
   }
 
@@ -93,7 +92,6 @@ export class CreateTasksComponent implements OnInit {
   }
 
   public check() {
-    console.log(this.steps);
   }
 
   public onFocus(event: any) {
@@ -110,6 +108,7 @@ export class CreateTasksComponent implements OnInit {
       formValues.id.value,
       formValues.name.value,
       formValues.description.value,
+      null,
       formValues.steps.value,
       formValues.score.value,
       0,
@@ -133,7 +132,7 @@ export class CreateTasksComponent implements OnInit {
     if (this.taskForm.valid) {
       this.error = undefined;
       const task: Task = this.formToModel();
-      task.steps = task.steps.filter(step => step.step != null && step.score != null);
+      task.steps = task.steps.filter(step => step.step != null);
       if (task.steps.length > 1) {
         this.emitTask.emit(task);
         this.counter -= 1;

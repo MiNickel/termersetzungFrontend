@@ -1,0 +1,26 @@
+<ng-container *ngIf="task !== undefined">
+  <div>
+    <div class="modal-header">
+      <h5 class="modal-title">Lösung für {{task.name}}</h5>
+    </div>
+    <div class="modal-body">
+
+      <ng-container *ngFor="let step of task.steps; let i = index;">
+        <div class="form-group row" style="margin-bottom: 5px;">
+          <!--Step-->
+          <div class="col-md-5">
+            <div [mathjax]="[step.step]" *ngIf="task.steps[0].step !== undefined">\( {{ '{}' }} \)</div>
+          </div>
+          <!--Conversion-->
+          <div *ngIf="i < task.steps.length - 1" class="col-md-5">
+            <div [mathjax]="[step.conversion]" *ngIf="task.steps[0].step !== undefined">\( {{ '{}' }}
+              \)</div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="activeModal.close()">Schließen</button>
+    </div>
+  </div>
+</ng-container>

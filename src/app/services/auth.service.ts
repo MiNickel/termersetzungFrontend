@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Credentials } from '../app.model';
+import { setHeaders } from '../shared/header';
 
 
 
@@ -14,23 +15,6 @@ export class AuthService {
 
     constructor(private http: HttpClient) {
 
-    }
-
-    protected setHeaders() {
-
-        let customHeaders = new HttpHeaders()
-            .set('Accept', 'application/json')
-            .append('Content-Type', 'application/json');
-
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-        if (currentUser && currentUser.token) {
-            customHeaders = new HttpHeaders()
-                .set('Accept', 'application/json')
-                .append('Content-Type', 'application/json')
-                .append('Authorization', currentUser.token);
-        }
-        return customHeaders;
     }
 
     get isLoggedIn() {
@@ -52,7 +36,7 @@ export class AuthService {
                 this.url + 'login',
                 credentials,
                 {
-                    headers: me.setHeaders(),
+                    headers: setHeaders(),
                     observe: 'body'
                 });
     }

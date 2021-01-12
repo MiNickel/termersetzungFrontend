@@ -17,7 +17,6 @@ import {UploadComponent} from './upload/upload.component';
 import {ErrorComponent} from './error/error.component';
 import {CreateTasksComponent} from './upload/create-tasks/create-tasks.component';
 import {UploadListComponent} from './upload/upload-list/upload-list.component';
-import {GeneratePdfComponent} from './generate-pdf/generate-pdf.component';
 import {ExerciseService} from './services/exercise.service';
 import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {ExerciseDetailsComponent} from './exercise/exercise-details/exercise-details.component';
@@ -33,6 +32,15 @@ import { LoginComponent } from './login/login.component';
 import { SuccessModalComponent } from './modal/success-modal/success-modal.component';
 import { ConfirmModalComponent } from './modal/confirm-modal/confirm-modal.component';
 import { MathJaxModule } from 'ngx-mathjax';
+import { SolutionModalComponent } from './exercise/exercise-details/solution-modal/solution-modal.component';
+import { ExaminerExamFinishedComponent } from './examiner/examiner-exam/examiner-exam-finished/examiner-exam-finished.component';
+// tslint:disable-next-line: max-line-length
+import { ExaminerExamFinishedDetailComponent } from './examiner/examiner-exam/examiner-exam-finished/examiner-exam-finished-detail/examiner-exam-finished-detail.component';
+import { DeactivateGuard } from './services/deactive.guard.service';
+import { StudentExerciseService } from './services/student.exercise.service';
+import { StudentExamService } from './services/student.exam.service';
+import { ActivateGuardProfessor } from './services/activate.guard.professor.service';
+import { ActivateGuardStudent } from './services/activate.guard.student.service';
 
 @NgModule({
    declarations: [
@@ -48,7 +56,6 @@ import { MathJaxModule } from 'ngx-mathjax';
       ErrorComponent,
       CreateTasksComponent,
       UploadListComponent,
-      GeneratePdfComponent,
       ExerciseDetailsComponent,
       ExaminerComponent,
       ExaminerExamComponent,
@@ -56,7 +63,10 @@ import { MathJaxModule } from 'ngx-mathjax';
       ExaminerTasklistComponent,
       LoginComponent,
       SuccessModalComponent,
-      ConfirmModalComponent
+      ConfirmModalComponent,
+      SolutionModalComponent,
+      ExaminerExamFinishedComponent,
+      ExaminerExamFinishedDetailComponent,
    ],
    imports: [
       BrowserModule,
@@ -79,6 +89,11 @@ import { MathJaxModule } from 'ngx-mathjax';
       ExamService,
       ExerciseService,
       AuthService,
+      DeactivateGuard,
+      StudentExerciseService,
+      StudentExamService,
+      ActivateGuardProfessor,
+      ActivateGuardStudent,
       {provide: OWL_DATE_TIME_LOCALE, useValue: 'de'},
    ],
    bootstrap: [
@@ -86,7 +101,8 @@ import { MathJaxModule } from 'ngx-mathjax';
    ],
    entryComponents: [
       SuccessModalComponent,
-      ConfirmModalComponent
+      ConfirmModalComponent,
+      SolutionModalComponent
    ]
 })
 export class AppModule {

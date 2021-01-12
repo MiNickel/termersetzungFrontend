@@ -9,9 +9,8 @@ import {ExamService} from '../../services/exam.service';
 })
 export class ExamListComponent implements OnInit {
 
-  @Input()
-  public taskList: Task[];
-  public activeTask = new Task(-1, '', '', [], 0, 0, 0, 0, 0);
+  public taskList: Task[] = [];
+  public activeTask = new Task(-1, '', '', '', [], 0, 0, 0, 0, 0);
   public taskStateMap: Map<string, string> = new Map();
 
   constructor(private examService: ExamService) {

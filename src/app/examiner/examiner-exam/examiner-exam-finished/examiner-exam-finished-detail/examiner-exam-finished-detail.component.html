@@ -1,0 +1,49 @@
+<div *ngIf="student && studentExam && exam" class="container">
+  <div style="margin-bottom: 30px;" class="d-flex justify-content-center">
+    <button class="btn btn-secondary" style="margin-right: 5px;" (click)="downloadWithScore()">Download mit
+      Punkten</button>
+    <button class="btn btn-secondary" (click)="downloadWithoutScore()">Download ohne Punkte</button>
+  </div>
+  <div id="content">
+    <h4 class="d-flex justify-content-center">{{exam.name}}</h4>
+    <h6 class="d-flex justify-content-center">Name: {{student.firstname + ' ' + student.lastname}}</h6>
+    <br>
+    <div style="margin-bottom: 30px;" *ngFor="let task of studentExam.tasks">
+      <div class="row">
+        <div class="col d-flex justify-content-center"><b>{{task.name}}</b></div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col d-flex justify-content-center">{{'Notizen: ' + task.notes}}</div>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Schritt</th>
+            <th scope="col">Umformung</th>
+            <th *ngIf="showScore === true" scope="col">Punktzahl</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let step of task.steps; let i = index;">
+            <tr>
+              <td><div [mathjax]="[step.step]" *ngIf="task.steps[0].step !== undefined">\( {{ '{}' }} \)</div></td>
+              <td><div [mathjax]="[step.conversion]" *ngIf="task.steps[0].step !== undefined">\( {{ '{}' }}
+                \)</div></td>
+                <td *ngIf="showScore === true"><div [mathjax]="[step.score]" *ngIf="task.steps[0].step !== undefined && i !== 0">\( {{ '{}' }}
+                  \)</div></td>  
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <div *ngIf="showScore === true" class="form-group row">
+        <div class="col">
+          Punktzahl:
+        </div>
+        <div class="col">
+          {{task.score + ' von ' + getTaskScore(task.name)}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

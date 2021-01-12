@@ -8,6 +8,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ConfirmModalComponent implements OnInit {
 
+  public text = '';
+
   constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit() {

@@ -10,15 +10,14 @@
     </div>
   </div>
 </div>
-<div *ngIf="exam !== undefined" class="row">
-  <div class="col-md-3">
-    <app-exam-list [taskList]="exam.tasks">
-
+<div class="row">
+  <div class="col-md-2">
+    <app-exam-list>
     </app-exam-list>
   </div>
-  <div *ngIf="taskObject !== undefined" class="col-md-9">
+  <div *ngIf="task !== undefined" class="col-md-10">
     <div class="form-row">
-      <div *ngIf="taskObject.steps[0].step !== ''" class="btn-group col-md-7" role="group">
+      <div *ngIf="task.steps[0].step !== ''" class="btn-group col-xl-7-custom col-lg-11" role="group">
         <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
           <div [mathjax]="'\\div'">\( {{ '{\\div}' }} \)</div>
         </button>
@@ -61,46 +60,75 @@
         <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button" class="btn btn-secondary">
           <div [mathjax]="'(f^\\prime)^\\prime'">\( {{ '(f^\\prime)^\\prime' }} \)</div>
         </button>
+
       </div>
-      <div class="col-md-5">
-        <textarea class="form-control" rows="4" placeholder="Hier können Sie Notizen machen"></textarea>
+      <span
+        title="Die Buttons dienen zur Eingabe von mathematischen Symbolen in LaTeX Notation innerhalb der Input Felder"
+        data-toggle="tooltip" data-placement="bottom" class="hover badge badge-dark">Info</span>
+      <div class="col-xl-4-custom col-lg-11">
+        <textarea [(ngModel)]="task.notes" class="form-control" rows="4"
+          placeholder="Hier können Sie Notizen machen"></textarea>
       </div>
     </div>
     <div style="margin-top: 1rem" class="row">
       <div class="col">
-        <div *ngIf="taskObject.description !== undefined">{{'Beschreibung: ' + taskObject.description}}</div>
+        <div *ngIf="task.description !== undefined">{{'Beschreibung: ' + task.description}}</div>
       </div>
     </div>
-    <hr style="margin-bottom: 1rem;" *ngIf="taskObject.description !== undefined">
+    <hr style="margin-bottom: 1rem;" *ngIf="task.description !== undefined">
 
-    <ng-container *ngFor="let step of steps; let i = index;">
+    <ng-container *ngFor="let step of task.steps; let i = index;">
       <div class="form-group row" style="margin-bottom: 5px;">
-        <div *ngIf="taskObject.steps[0].step !== undefined" class="col col-form-label" [mathjax]="step">\(
-          {{ '{' + step + '}' }} \)</div>
-        <div class="col">
-          <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="taskObject.steps[0].step !== undefined"
-            type="text" class="form-control" [(ngModel)]="operations[i]" />
+        <!--Step-->
+        <div *ngIf="task.steps[0].step !== undefined" class="col-md-5 col-form-label" [mathjax]="[step.step]">\(
+          {{ '{}' }} \)</div>
+        <!--Conversion-->
+        <div class="col-md-5 col-form-label" *ngIf="i < task.steps.length - 1 && task.steps[0].step !== undefined"
+          [mathjax]="[step.conversion]">\( {{ '{}' }}
+          \)</div>
+        <div *ngIf="i === task.steps.length - 1" class="col-md-5">
+          <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="task.steps[0].step !== undefined" type="text"
+            class="form-control" [(ngModel)]="step.conversion" />
         </div>
-        <button (click)="editStep(i)" *ngIf="i !== 0" type="button" class="btn btn-light">Edit</button>
+        <!--Edit-->
+        <div style="padding-left: 0px; height: 38px;" class="col-md-1 btn-group">
+          <button (click)="editStep(i)" class="btn btn-light"><em class="fa fa-pencil-square-o"></em></button>
+          <button *ngIf="i !== 0" (click)="removeStep(i)" class="btn btn-light"><em class="fa fa-times"></em></button>
+        </div>
+      </div>
+      <div *ngIf="i === task.steps.length - 1 && step.conversion !==''" class="form-group row">
+        <div class="col-md-5">
+        </div>
+        <div class="col-md-5">
+          <div [mathjax]="[step.conversion]" *ngIf="step.conversion !==''">\( {{ '{}' }} \)</div>
+        </div>
       </div>
       <div *ngIf="editStepBool[i]" class="form-group row">
-        <input placeholder="Term bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step" type="text"
-          class="form-control col">
+        <div class="col-md-5">
+          <input *ngIf="i !== 0" placeholder="Schritt bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step.step"
+            type="text" class="form-control col">
+        </div>
+        <div class="col-md-5">
+          <input *ngIf="i !== task.steps.length - 1" placeholder="Umformung bearbeiten" (focus)="onFocus($event)"
+            [(ngModel)]="step.conversion" type="text" class="form-control col">
+        </div>
       </div>
     </ng-container>
+    <!--newTerm-->
     <div class="form-group row">
-      <div class="col">
+      <div class="col-md-11">
         <input placeholder="neuer Term" (focus)="onFocus($event)" [(ngModel)]="newTerm" type="text"
           class="form-control">
       </div>
     </div>
     <div class="form-group row">
-      <div *ngIf="newTerm !==''" class="col" [mathjax]="newTerm">\( {{ '{' + newTerm + '}' }} \)</div>
+      <div *ngIf="newTerm !==''" class="col" [mathjax]="[newTerm]">\( {{ '{}' }} \)</div>
     </div>
+    <!--Bottom Buttons-->
     <div class="form-group row">
-      <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt
+      <button type="button" class="btn btn-secondary" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt
       </button>
-      <button type="button" class="btn btn-light" (click)="finished()">Fertig</button>
+
     </div>
     <div class="form-group row">
       <form [formGroup]="form">
@@ -129,5 +157,8 @@
       </form>
     </div>
     <br>
+    <div class="form-group row">
+      <button type="button" class="btn btn-dark" (click)="save()">Klausur abschicken</button>
+    </div>
   </div>
 </div>

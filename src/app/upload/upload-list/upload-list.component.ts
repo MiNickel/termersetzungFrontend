@@ -10,7 +10,7 @@ import {TaskService} from 'src/app/services/task.service';
 export class UploadListComponent implements OnInit {
 
   public taskList: Task[] = [];
-  public activeTask = new Task(-1, '', '', [], 0, 0, 0, 0, 0);
+  public activeTask = new Task(-1, '', '', '', [], 0, 0, 0, 0, 0);
 
   constructor(private taskService: TaskService) {
   }
@@ -24,7 +24,7 @@ export class UploadListComponent implements OnInit {
   }
 
   public deselectTask() {
-    this.activeTask = new Task(-1, '', '', [], 0, 0, 0, 0, 0);
+    this.activeTask = new Task(-1, '', '', '', [], 0, 0, 0, 0, 0);
   }
 
 }

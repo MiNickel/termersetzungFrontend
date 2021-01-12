@@ -9,16 +9,36 @@
   </div>
   <div class="row">
     <div class="col-sm">
-      <ul class="list-group">
+      <p style="text-align: center;" *ngIf="exams.length === 0">Es gibt momentan noch keine Klausuren.</p>
+      <ul *ngIf="exams.length > 0" class="list-group">
         <li (click)="goToExam(exam.id)" *ngFor="let exam of exams" class="list-group-item">
           {{exam.name}}</li>
       </ul>
     </div>
     <div class="col-sm">
-      <ul class="list-group">
+      <p style="text-align: center;" *ngIf="exercises.length === 0">Es gibt momentan noch keine Übungen.</p>
+      <ul *ngIf="exercises.length > 0" class="list-group">
         <li (click)="goToExercise(exercise.id)" *ngFor="let exercise of exercises" class="list-group-item">
           {{exercise.name}}</li>
       </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm" style="text-align: center;">
+      <h5>Abgeschlossene Klausuren</h5>
+    </div>
+    <div class="col-sm" style="text-align: center;">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <p style="text-align: center;" *ngIf="finishedExams.length === 0">Es gibt momentan noch keine abgeschlossene Klausuren.</p>
+      <ul *ngIf="finishedExams.length > 0" class="list-group">
+        <li (click)="goToFinishedExam(exam.id)" *ngFor="let exam of finishedExams" class="list-group-item">
+          {{exam.name}}</li>
+      </ul>
+    </div>
+    <div class="col-sm">
     </div>
   </div>
 </div>

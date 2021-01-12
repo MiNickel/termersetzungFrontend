@@ -1,0 +1,30 @@
+@import "~font-awesome/css/font-awesome.css";
+textarea {
+  resize: none;
+}
+
+.alert {
+  padding: .4rem 1rem;
+}
+
+@media (min-width: 1470px) {
+.col-xl-7-custom {
+    -ms-flex: 0 0 58.333333%;
+    flex: 0 0 58.333333%;
+    max-width: 58.333333%;
+} 
+}
+
+@media (min-width: 1470px) {
+.col-xl-4-custom {
+    -ms-flex: 0 0 33.333333%;
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+} 
+}
+
+.hover:hover {
+  cursor: help;
+}
+ 
+

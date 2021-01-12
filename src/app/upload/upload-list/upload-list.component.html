@@ -1,13 +1,13 @@
-<li *ngIf="taskList.length !== 0" class="list-group">
-  <ol *ngFor="let task of taskList">
+<ol *ngIf="taskList.length !== 0" class="list-group">
+  <p style="text-align: center">Aufgaben</p>
+  <ul *ngFor="let task of taskList">
     <li class="list-group-item" [ngClass]="{'list-group-item-secondary': task.name === activeTask.name}"
       (click)="selectTask(task)">
       <span>{{task.name}}</span>
       <span>{{' - ' + task.score + ' Punkte'}}</span>
     </li>
-  </ol>
-</li>
-<div *ngIf="taskList.length === 0">
+  </ul>
+</ol>
+<div style="text-align: center;" *ngIf="taskList.length === 0">
   Bisher sind noch keine Aufgaben vorhanden
 </div>
-<!--<button type="button" class="btn btn-secondary" (click)="createNewTask()">Neue Aufgabe erstellen</button>-->

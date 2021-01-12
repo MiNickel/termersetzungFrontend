@@ -1,71 +1,103 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ExerciseService } from 'src/app/services/exercise.service';
-import { Exercise, Task, CheckStep, StudentExercise, Step } from 'src/app/app.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ExerciseListComponent } from '../exercise-list/exercise-list.component';
-import { MathJaxDirective } from 'ngx-mathjax';
+import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ExerciseService } from "src/app/services/exercise.service";
+import {
+  Exercise,
+  Task,
+  CheckStep,
+  StudentExercise,
+  Step,
+} from "src/app/app.model";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ExerciseListComponent } from "../exercise-list/exercise-list.component";
+import { MathJaxDirective } from "ngx-mathjax";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { SolutionModalComponent } from "./solution-modal/solution-modal.component";
+import { StudentExerciseService } from "src/app/services/student.exercise.service";
 
 @Component({
-  selector: 'app-exercise-details',
-  templateUrl: './exercise-details.component.html',
-  styleUrls: ['./exercise-details.component.css']
+  selector: "app-exercise-details",
+  templateUrl: "./exercise-details.component.html",
+  styleUrls: ["./exercise-details.component.scss"],
 })
 export class ExerciseDetailsComponent implements OnInit {
-
+  public exercise: Exercise;
   public studentExercise: StudentExercise;
   public activeInputElement: any;
-  public newTerm = '';
+  public newTerm = "";
   public editStepBool: boolean[] = [false];
   public conversions: boolean[] = [];
   public task: Task;
-
-  public editStepMap = new Map<number, string>();
-  public editConversionMap = new Map<number, string>();
+  public solutionFound: boolean;
+  public notCheckedStepsIndices: number[] = [];
+  public solutionStep: string;
 
   public form: FormGroup;
 
   @ViewChild(ExerciseListComponent, { static: false })
   private exerciseList: ExerciseListComponent;
 
-  constructor(private route: ActivatedRoute, private exerciseService: ExerciseService,
-              private fb: FormBuilder, private router: Router) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private exerciseService: ExerciseService,
+    // tslint:disable-next-line: align
+    private fb: FormBuilder,
+    private router: Router,
+    // tslint:disable-next-line: align
+    private modalService: NgbModal,
+    private studentExerciseService: StudentExerciseService
+  ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.createForm();
+    this.route.params.subscribe((params) => {
       const studentId: number = this.getStudentId();
       const exerciseId: number = +params.id;
-      this.exerciseService.getStudentExerciseByExerciseIdAndStudentId(exerciseId, studentId)
+      this.studentExerciseService
+        .getStudentExerciseByExerciseIdAndStudentId(exerciseId, studentId)
         .subscribe((studentExercise: StudentExercise) => {
           this.task = undefined;
           this.studentExercise = studentExercise;
           this.exerciseList.taskList = studentExercise.tasks;
         });
+      this.exerciseService
+        .getExerciseByIdForStudent(exerciseId)
+        .subscribe((exercise) => {
+          this.exercise = exercise;
+        });
     });
+
     this.exerciseService.currentTask.subscribe((task: any) => {
-      console.log('currentTask');
       if (this.task !== undefined) {
         this.saveCurrentTask();
       }
-      if (task !== '') {
+      if (task !== "") {
+        this.solutionStep = "";
         this.task = task;
+        this.getTaskState();
       }
     });
-    this.createForm();
     this.onFormChange();
   }
 
   createForm() {
     this.form = this.fb.group({
-      taskState: ['', Validators.required]
+      taskState: ["", Validators.required],
     });
   }
 
   onFormChange() {
-    this.form.get('taskState').valueChanges.subscribe(val => {
+    this.form.get("taskState").valueChanges.subscribe((val) => {
       this.exerciseService.changeTaskState(this.task.name, val);
     });
+  }
+
+  getTaskState() {
+    if (this.exerciseList.taskStateMap.size > 1) {
+      this.form.controls.taskState.setValue(
+        this.exerciseList.taskStateMap.get(this.task.name)
+      );
+    }
   }
 
   onFocus(event: any) {
@@ -77,78 +109,112 @@ export class ExerciseDetailsComponent implements OnInit {
   }
 
   saveCurrentTask() {
-    const index: number = this.exerciseList.taskList.findIndex(task => task.name === this.task.name);
+    const index: number = this.exerciseList.taskList.findIndex(
+      (task) => task.name === this.task.name
+    );
     this.exerciseList.taskList[index] = this.task;
   }
 
   check() {
     const me = this;
     const checkStepList: CheckStep[] = [];
+    this.notCheckedStepsIndices = [];
     for (let i = 0; i < this.task.steps.length - 1; i++) {
-      const startEquation: string = this.task.steps[i].step;
-      const targetEquation: string = this.task.steps[i + 1].step;
-      checkStepList.push(new CheckStep(startEquation, this.task.steps[i].conversion, targetEquation, null));
-    }
-    this.exerciseService.checkTask(checkStepList).subscribe(correctedSteps => {
-      for (const [index, step] of correctedSteps.entries()) {
-        me.conversions[index] = step.correct;
+      if (this.task.steps[i].conversion !== "") {
+        const startEquation: string = this.task.steps[i].step;
+        const targetEquation: string = this.task.steps[i + 1].step;
+        checkStepList.push(
+          new CheckStep(
+            startEquation,
+            this.task.steps[i].conversion,
+            targetEquation,
+            null
+          )
+        );
+      } else {
+        this.notCheckedStepsIndices.push(i);
       }
-      console.log(me.conversions);
-    });
+    }
+    this.exerciseService
+      .checkTask(checkStepList)
+      .subscribe((correctedSteps) => {
+        for (const [index, step] of correctedSteps.entries()) {
+          me.conversions[index] = step.correct;
+        }
+        for (const index of this.notCheckedStepsIndices) {
+          me.conversions.splice(index, 0, undefined);
+        }
+        const solution: Task = this.exercise.tasks.find(
+          (task) =>
+            this.task.name === task.name &&
+            this.task.description === task.description
+        );
+        this.solutionStep = solution.steps[solution.steps.length - 1].step;
+        const studentSolutionStep = this.task.steps.find(
+          (step) => step.step === this.solutionStep
+        );
+        if (studentSolutionStep !== undefined) {
+          this.solutionFound = true;
+        } else {
+          this.solutionFound = false;
+        }
+        if (this.solutionFound === false) {
+          setTimeout(() => {
+            this.solutionFound = undefined;
+          }, 5000);
+        }
+        console.log(
+          "SolutionStep: " +
+            this.solutionStep +
+            "StudentSolutionStep: " +
+            studentSolutionStep +
+            ", " +
+            this.solutionFound
+        );
+      });
   }
 
-  editStep(index: number, step: string) {
+  editStep(index: number) {
     this.editStepBool[index] = this.editStepBool[index] !== true;
-    /*if (this.editStepBool[index] === true) {
-      this.editStepMap.set(index, this.task.steps[index].step);
-      this.editConversionMap.set(index, this.task.steps[index].conversion);
-    } else {
-      this.task.steps[index].step = this.editStepMap.get(index);
-      this.task.steps[index].conversion = this.editConversionMap.get(index);
-    }*/
+  }
+
+  removeStep(index: number) {
+    this.task.steps.splice(index, 1);
   }
 
   nextStep() {
-    this.task.steps.push(new Step(-1, this.newTerm, 0, ''));
-    this.newTerm = '';
+    this.task.steps.push(new Step(-1, this.newTerm, 0, ""));
+    this.newTerm = "";
     this.editStepBool.push(false);
   }
-
-  getBackgroundColor(index: number) {
-    const bool = this.conversions[index];
-    if (bool === true) {
-      return '#d4edda';
-    } else if (bool === false) {
-      return '#f8d7da';
-    } else {
-      return '#fff';
-    }
-  }
-
-  /* finished() {
-    let result = this.steps[this.steps.length - 1].replace('$', '');
-    result = result.replace('$', '');
-    console.log(result);
-    console.log(this.task.steps[this.task.steps.length - 1].step);
-    if (result === this.task.steps[this.task.steps.length - 1].step) {
-      console.log('richtig');
-    }
-  } */
 
   save() {
     this.saveCurrentTask();
     this.studentExercise.tasks = this.exerciseList.taskList;
     this.studentExercise.studentId = this.getStudentId();
-    this.exerciseService.uploadStudentExercise(this.studentExercise).subscribe(result => {
+    this.studentExerciseService
+      .uploadStudentExercise(this.studentExercise)
+      .subscribe((result) => {});
+  }
 
+  showSolution() {
+    const solution: Task = this.exercise.tasks.find(
+      (task) =>
+        this.task.name === task.name &&
+        this.task.description === task.description
+    );
+    const modalRef = this.modalService.open(SolutionModalComponent, {
+      centered: true,
+      size: "lg",
     });
+    modalRef.componentInstance.task = solution;
+    modalRef.result.then((result) => {}).catch(() => {});
   }
 
   private getStudentId(): number {
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem("currentUser");
     const jsonObject = JSON.parse(currentUser);
     const studentId: number = jsonObject.studentId;
     return studentId;
   }
-
 }

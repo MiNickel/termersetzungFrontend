@@ -4,18 +4,20 @@
       <h5>Offene Übungen</h5>
     </div>
     <div class="col-sm" style="text-align: center;">
-      <h5>Fertige Übungen</h5>
+      <h5>Angefangene Übungen</h5>
     </div>
   </div>
   <div class="row">
     <div class="col-sm">
-      <ul class="list-group">
+      <p style="text-align: center;" *ngIf="exercises.length === 0">Es gibt momentan noch keine Übungen.</p>
+      <ul *ngIf="exercises.length > 0" class="list-group">
         <li (click)="openExercise(exercise.id)" *ngFor="let exercise of exercises" class="list-group-item">
           {{exercise.name}}</li>
       </ul>
     </div>
     <div class="col-sm">
-      <ul class="list-group">
+      <p style="text-align: center;" *ngIf="studentExercises.length === 0">Es gibt momentan noch keine angefangenen Übungen.</p>
+      <ul *ngIf="studentExercises.length > 0" class="list-group">
         <li (click)="openExercise(studentExercise.exerciseId)" *ngFor="let studentExercise of studentExercises" class="list-group-item">
           {{studentExerciseNameMap.get(studentExercise.exerciseId)}}</li>
       </ul>

@@ -3,9 +3,9 @@
     <app-exercise-list>
     </app-exercise-list>
   </div>
-  <div *ngIf="task !== undefined" class="col-md-10">
+  <div *ngIf="task !== undefined" class="col-10">
     <div class="form-row">
-      <div *ngIf="task.steps[0].step !== ''" class="btn-group col-md-7" role="group">
+      <div *ngIf="task.steps[0].step !== ''" class="btn-group col-xl-7-custom col-lg-11" role="group">
         <button (click)="setSymbol('\\div')" type="button" class="btn btn-secondary">
           <div [mathjax]="'\\div'">\( {{ '{\\div}' }} \)</div>
         </button>
@@ -48,11 +48,16 @@
         <button (click)="setSymbol('(f^\\prime)^\\prime')" type="button" class="btn btn-secondary">
           <div [mathjax]="'(f^\\prime)^\\prime'">\( {{ '(f^\\prime)^\\prime' }} \)</div>
         </button>
+        <span
+      title="Die Buttons dienen zur Eingabe von mathematischen Symbolen in LaTeX Notation innerhalb der Input Felder"
+      data-toggle="tooltip" data-placement="bottom" class="hover badge badge-dark">Info</span>
       </div>
-      <div class="col-md-5">
-        <textarea class="form-control" rows="4" placeholder="Hier können Sie Notizen machen"></textarea>
+      <div class="col-xl-4-custom col-lg-11">
+        <textarea [(ngModel)]="task.notes" class="form-control" rows="4"
+          placeholder="Hier können Sie Notizen machen"></textarea>
       </div>
     </div>
+    
     <div style="margin-top: 1rem" class="row">
       <div class="col">
         <div *ngIf="task.description !== undefined">{{'Aufgabenbeschreibung: ' + task.description}}</div>
@@ -63,41 +68,45 @@
     <ng-container *ngFor="let step of task.steps; let i = index;">
       <div class="form-group row" style="margin-bottom: 5px;">
         <!--Step-->
-        <div [ngClass]="{'alert alert-danger': conversions[i-1] === false,
-                          'alert alert-success': conversions[i-1] === true}" class="col-md-5">
+        <div [ngClass]="{'alert-danger': conversions[i-1] === false,
+                          'alert-success': conversions[i-1] === true,
+                        'alert': conversions[i-1] === false || conversions[i-1] === true}" class="col-md-5">
           <div [mathjax]="[step.step]" *ngIf="task.steps[0].step !== undefined">\( {{ '{}' }} \)</div>
         </div>
-        <!--<div [ngClass]="{'alert alert-danger': conversions[i-1] === false,
-                          'alert alert-success': conversions[i-1] === true}" *ngIf="!editStepBool[i]" class="col-md-5">
-          <div [mathjax]="step.step" *ngIf="task.steps[0].step !== undefined">\( {{ '{' + step.step + '}' }} \)</div>
-        </div>-->
-        <!--<div *ngIf="editStepBool[i] && editStepMap.get(i) !== undefined" class="col-md-5">
-          <div [mathjax]="[editStepMap.get(i)]" *ngIf="task.steps[0].step !== undefined">\( {{ '{}' }} \)</div>
-        </div>-->
         <!--Conversion-->
-        <div *ngIf="i < task.steps.length - 1" [ngClass]="{'col-md-6': i == 0, 'col-md-5': i !== 0}">
+        <div [ngClass]="{'alert-danger': conversions[i] === false,
+        'alert-success': conversions[i] === true,
+        'alert': conversions[i] === false || conversions[i] === true}" *ngIf="i < task.steps.length - 1"
+          class="col-md-5">
           <div [mathjax]="[step.conversion]" *ngIf="task.steps[0].step !== undefined">\( {{ '{}' }}
             \)</div>
         </div>
-        <div *ngIf="i === task.steps.length - 1" [ngClass]="{'col-md-6': i == 0, 'col-md-5': i !== 0}">
-          <input [style.background-color]="getBackgroundColor(i)" placeholder="Umformung" (focus)="onFocus($event)"
-            *ngIf="task.steps[0].step !== undefined" type="text" class="form-control" [(ngModel)]="step.conversion" />
+        <div *ngIf="i === task.steps.length - 1" class="col-md-5">
+          <input placeholder="Umformung" (focus)="onFocus($event)" *ngIf="task.steps[0].step !== undefined" type="text"
+            class="form-control" [(ngModel)]="step.conversion" />
         </div>
         <!--Edit-->
-        <div *ngIf="i !== 0" class="col-md-1">
-          <button (click)="editStep(i, step.step)" type="button" class="btn btn-light">Edit</button>
+        <div style="padding-left: 0px; height: 38px;" class="col-md-1 btn-group">
+          <button (click)="editStep(i)" class="btn btn-light"><em class="fa fa-pencil-square-o"></em></button>
+          <button *ngIf="i !== 0" (click)="removeStep(i)" class="btn btn-light"><em class="fa fa-times"></em></button>
+        </div>
+      </div>
+      <div *ngIf="i === task.steps.length - 1 && step.conversion !==''" class="form-group row">
+        <div class="col-md-5">
+
+        </div>
+        <div class="col-md-5">
+          <div [mathjax]="[step.conversion]" *ngIf="step.conversion !==''">\( {{ '{}' }} \)</div>
         </div>
       </div>
       <div *ngIf="editStepBool[i]" class="form-group row">
         <div class="col-md-5">
-          <input placeholder="Schritt bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step.step" type="text"
-            class="form-control col">
-          <!--<input placeholder="Schritt bearbeiten" (focus)="onFocus($event)" [ngModel]="editStepMap.get(i)"
-            (ngModelChange)="editStepMap.set(i, $event)" type="text" class="form-control col">-->
+          <input *ngIf="i !== 0" placeholder="Schritt bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step.step"
+            type="text" class="form-control col">
         </div>
         <div class="col-md-5">
-          <input placeholder="Umformung bearbeiten" (focus)="onFocus($event)" [(ngModel)]="step.conversion" type="text"
-            class="form-control col">
+          <input *ngIf="i !== task.steps.length - 1" placeholder="Umformung bearbeiten" (focus)="onFocus($event)"
+            [(ngModel)]="step.conversion" type="text" class="form-control col">
         </div>
       </div>
     </ng-container>
@@ -111,14 +120,20 @@
     <div class="form-group row">
       <div [mathjax]="[newTerm]" *ngIf="newTerm !==''" class="col">\( {{ '{}' }} \)</div>
     </div>
+    <div *ngIf="solutionFound === true" class="alert alert-success form-group row col-md-11">Die Lösung wurde gefunden!
+      <div [mathjax]="[solutionStep]" class="col">\( {{ '{}' }} \)</div>
+    </div>
+    <div *ngIf="solutionFound === false" class="alert alert-danger form-group row col-md-11">Die Lösung wurde noch nicht
+      gefunden.
+    </div>
     <!--Bottom Buttons-->
     <div class="form-group row">
       <div class="col">
-        <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="check()">Umformungen prüfen
+        <button type="button" class="btn btn-secondary" style="margin-right: 5px;" (click)="check()">Umformungen prüfen
         </button>
-        <button type="button" class="btn btn-light" style="margin-right: 5px;" (click)="nextStep()">nächster Schritt
+        <button type="button" class="btn btn-secondary" style="margin-right: 5px;" (click)="nextStep()">Nächster Schritt
         </button>
-        <button type="button" class="btn btn-light" (click)="save()">Fertig</button>
+        <button type="button" class="btn btn-secondary" (click)="showSolution()">Lösung für Aufgabe anzeigen</button>
       </div>
     </div>
     <div class="form-group row">
@@ -148,5 +163,11 @@
       </form>
     </div>
     <br>
+    <div class="form-group row">
+      <div class="col">
+        <button type="button" class="btn btn-dark" style="margin-right: 5px;" (click)="save()">Fortschritt
+          speichern</button>
+      </div>
+    </div>
   </div>
 </div>

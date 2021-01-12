@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ExerciseService } from '../services/exercise.service';
 import { Exercise, StudentExercise } from '../app.model';
 import { Router } from '@angular/router';
+import { StudentExerciseService } from '../services/student.exercise.service';
 
 @Component({
   selector: 'app-exercise',
@@ -14,14 +15,14 @@ export class ExerciseComponent implements OnInit {
   public exercises: Exercise[];
   public studentExerciseNameMap = new Map<number, string>();
 
-  constructor(private exerciseService: ExerciseService, private router: Router) { }
+  constructor(private exerciseService: ExerciseService, private router: Router, private studentExerciseService: StudentExerciseService) { }
 
   ngOnInit() {
     const currentUser = localStorage.getItem('currentUser');
     const jsonObject = JSON.parse(currentUser);
     const studentId: number = jsonObject.studentId;
 
-    this.exerciseService.getAllExercisesForStudent(studentId).subscribe((studentExercises: StudentExercise[]) => {
+    this.studentExerciseService.getAllExercisesForStudent(studentId).subscribe((studentExercises: StudentExercise[]) => {
       this.studentExercises = studentExercises;
       this.exerciseService.getAllExercises().subscribe((exercises: Exercise[]) => {
         for (const studentExercise of studentExercises) {

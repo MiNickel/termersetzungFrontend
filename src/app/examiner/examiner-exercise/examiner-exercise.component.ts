@@ -33,11 +33,10 @@ export class ExaminerExerciseComponent implements OnInit {
 
   ngOnInit() {
     const exerciseId = this.route.snapshot.params.id;
-    this.exerciseService.getExerciseById(exerciseId).subscribe((exercise: Exercise) => {
+    this.exerciseService.getExerciseByIdForExaminer(exerciseId).subscribe((exercise: Exercise) => {
       this.createForm(exercise);
       this.created = true;
       this.taskList.taskList = exercise.tasks;
-      console.log(this.taskList.taskList);
     });
     this.taskService.currentTaskExaminerExercise.subscribe((task: any) => {
       if (task !== '') {
@@ -74,7 +73,6 @@ export class ExaminerExerciseComponent implements OnInit {
   }
 
   public saveTask(task: Task) {
-    console.log(task);
     const taskIndex = this.taskList.taskList.findIndex(t => t.id === task.id);
     if (taskIndex === -1) {
       this.taskList.taskList.push(task);
@@ -92,7 +90,9 @@ export class ExaminerExerciseComponent implements OnInit {
 
   public upload() {
     const me = this;
-    const modalRefConfirm = me.modalService.open(ConfirmModalComponent).result.then(confirmation => {
+    const modalRefConfirm = me.modalService.open(ConfirmModalComponent);
+    modalRefConfirm.componentInstance.text = 'Wollen Sie die Übung wirklich hochladen?';
+    modalRefConfirm.result.then(confirmation => {
       if (confirmation === 'yes') {
         const exercise: Exercise = this.formToModel();
         this.exerciseService.uploadExercise(exercise).subscribe(result => {

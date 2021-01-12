@@ -36,7 +36,6 @@ export class UploadComponent implements OnInit {
   ngOnInit() {
     this.createForm();
     this.taskService.currentTaskUpload.subscribe((task: any) => {
-      console.log(task);
       if (task !== '') {
         this.createTasks.task = task;
       }
@@ -102,13 +101,15 @@ export class UploadComponent implements OnInit {
   }
 
   public deselectActiveTask(event: any) {
-    console.log('dog');
     this.uploadList.deselectTask();
   }
 
   public upload() {
     const me = this;
-    const modalRefConfirm = me.modalService.open(ConfirmModalComponent).result.then(confirmation => {
+    const modalRefConfirm = me.modalService.open(ConfirmModalComponent);
+    modalRefConfirm.componentInstance.text = 'Wollen Sie die Übung/Klausur wirklich hochladen?';
+
+    modalRefConfirm.result.then(confirmation => {
       if (confirmation === 'yes') {
         const test: Exam | Exercise = this.formToModel();
         if (test instanceof Exam) {
