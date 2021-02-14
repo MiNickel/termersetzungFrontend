@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StudentExam } from '../app.model';
 import { setHeaders } from '../shared/header';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class StudentExamService {
 
-    private url = 'http://localhost:11090/studentexam/';
+    private url = `${environment.url}/studentexam/`;
 
     constructor(private http: HttpClient) { }
 

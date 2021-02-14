@@ -1,49 +1,43 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Credentials } from '../app.model';
-import { setHeaders } from '../shared/header';
-
-
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Credentials } from "../app.model";
+import { setHeaders } from "../shared/header";
+import { environment } from "../../environments/environment";
 
 @Injectable()
 export class AuthService {
+  private url = environment.url + "/";
 
-    private url = 'http://localhost:11090/';
+  private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
 
-    private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) {
+  get isLoggedIn() {
+    const user = localStorage.getItem("currentUser");
+    this.loggedIn.next(user != null);
 
-    }
+    return this.loggedIn;
+  }
 
-    get isLoggedIn() {
-        const user = localStorage.getItem('currentUser');
-        this.loggedIn.next(user != null);
+  setLoggedIn(bool: boolean) {
+    this.loggedIn.next(bool);
+  }
 
-        return this.loggedIn;
-    }
+  getJWT(credentials: Credentials) {
+    const me = this;
 
-    setLoggedIn(bool: boolean) {
-        this.loggedIn.next(bool);
-    }
+    return this.http.post<any>(this.url + "login", credentials, {
+      headers: setHeaders(),
+      observe: "body",
+    });
+  }
 
-    getJWT(credentials: Credentials) {
-        const me = this;
-
-        return this.http
-            .post<any>(
-                this.url + 'login',
-                credentials,
-                {
-                    headers: setHeaders(),
-                    observe: 'body'
-                });
-    }
-
-    logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-        this.setLoggedIn(false);
-    }
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem("currentUser");
+    this.setLoggedIn(false);
+  }
 }

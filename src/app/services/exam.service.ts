@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Exam, StudentExam, Task } from '../app.model';
 import { BehaviorSubject } from 'rxjs';
 import { setHeaders } from '../shared/header';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class ExamService {
   constructor(private http: HttpClient) {
   }
 
-  private url = 'http://localhost:11090/exam';
+  private url = `${environment.url}/exam`;
 
   changeTaskState(key: string, value: string) {
     this.taskState.next({ key, value });
